@@ -7,9 +7,6 @@ author:
     email: seamusrobertmurphy@gmail.com
     degrees:
       - PhD
-      - MSc
-      - MA
-      - BA
 abstract: > 
   The following workflow provides a starter script for deriving deforestation 
   risk maps in accordance with Verra's new methodology for unplanned 
@@ -28,12 +25,11 @@ format:
     toc-title: "**Contents**"
     toc-depth: 5
     toc-expand: 4
-    theme: [minimal, ./R/styles.scss]
+    theme: [minimal, styles.scss]
 highlight-style: github
 df-print: kable
 keep-md: true
 prefer-html: true
-output-dir: docs
 bibliography: references.bib
 ---
 
@@ -63,6 +59,7 @@ div.column {
 
 
 
+
 ## Summary
 
 Two workflow approaches are detailed below.
@@ -71,6 +68,7 @@ Workflow-2 is coded using Python and Google Earth Engine functions that are more
 For comparison purposes, both workflows derive outputs from the same image collection of STAC-formatted analysis-ready-data of Landsat scenes, following steps outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021 .
 
 ![Figure 1: Sequence of deforestation risk map development (VT0007:6)](R/VT0007-risk-map-development-sequence.png)
+
 
 
 
@@ -118,7 +116,9 @@ plot(s2_reg_cube_ro,
 
 
 
+
 ## Housekeeping
+
 
 
 

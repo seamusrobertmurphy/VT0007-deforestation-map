@@ -7,9 +7,6 @@ author:
     email: seamusrobertmurphy@gmail.com
     degrees:
       - PhD
-      - MSc
-      - MA
-      - BA
 abstract: > 
   The following workflow provides a starter script for deriving deforestation 
   risk maps in accordance with Verra's new methodology for unplanned 
@@ -28,12 +25,11 @@ format:
     toc-title: "**Contents**"
     toc-depth: 5
     toc-expand: 4
-    theme: [minimal, ./R/styles.scss]
+    theme: [minimal, styles.scss]
 highlight-style: github
 df-print: kable
 keep-md: true
 prefer-html: true
-output-dir: docs
 bibliography: references.bib
 ---
 

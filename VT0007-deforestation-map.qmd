@@ -165,7 +165,9 @@ Workflow-1, which is coded using the R ecosystem, allows additional model tuning
 
 ## Process data cube
 
-For shawcasing purposes, we import a training dataset from the `sitsdata` package from a study of Brazil's Samuel Hydroelectric Dam in Rondonia State conducted between 2020-06-04 to 2021-08-26. To evaluate this training sample, we assemble below a data cube of Sentinel-2-L2A-COGS images from the AWS open bucket. Raster normalization is implemented with `sits_regularize` functions to apply a cloud masking and back-filling of missing pixels by cloudless ranking and global median values across 16-day intervals. 
+For shawcasing purposes, we import a training dataset from the `sitsdata` package from a study of Brazil's Samuel Hydroelectric Dam in Rondonia State conducted between 2020-06-04 to 2021-08-26.
+To evaluate this training sample, we assemble below a data cube of Sentinel-2-L2A-COGS images from the AWS open bucket.
+Raster normalization is implemented with `sits_regularize` functions to apply a cloud masking and back-filling of missing pixels by cloudless ranking and global median values across 16-day intervals.
 
 ```{r}
 #| eval: false
@@ -226,7 +228,8 @@ plot(s2_reg_cube_ro,
 
 ## Classify data cube
 
-We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (`Burned_Area`, `Forest`, `Highly_Degraded`, and `Cleared_Area`). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.
+We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (`Burned_Area`, `Forest`, `Highly_Degraded`, and `Cleared_Area`).
+Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.
 
 ```{r}
 library(sitsdata)
@@ -274,7 +277,8 @@ plot(s2_cube_label)
 
 ## Review uncertainty
 
-To improve model performance, we need to first calculate the uncertainty of the classification. In particular, the following confirms highest uncertainty in wetland and water areas evidently mis-classifed above.
+To improve model performance, we need to first calculate the uncertainty of the classification.
+In particular, the following confirms highest uncertainty in wetland and water areas evidently mis-classifed above.
 
 ```{r}
 # Find samples with high uncertainty
@@ -345,7 +349,6 @@ plot(s2_cube_label_v2)
 ```
 
 ## Review improvements
-
 
 ```{r}
 # Calculate the uncertainty cube

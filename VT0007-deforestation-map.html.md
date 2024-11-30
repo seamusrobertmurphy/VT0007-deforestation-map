@@ -217,7 +217,7 @@ plot(s2_cube_label)
 
 
 
-## Review uncertainty
+## Map uncertainty
 
 To improve model performance, we estimate class uncertainty and plot these pixel error metrics.
 Results below reveal highest uncertainty levels in classification of wetland and water areas.
@@ -250,7 +250,7 @@ plot(s2_cube_uncert)
 
 As expected, the places of highest uncertainty are those covered by surface water or associated with wetlands.
 These places are likely to be misclassified.
-For this reason, sits provides sits_uncertainty_sampling(), which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty [@camaraUncertaintyActiveLearning].
+For this reason, sits provides `sits_uncertainty_sampling()`, which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty [@camaraUncertaintyActiveLearning].
 
 
 
@@ -271,14 +271,17 @@ sits_view(new_samples)
 ```
 
 ::: {.cell-output-display}
-preserve54ae1a3ab54aa88c
+preservedda470c8ed8bac7c
 :::
 :::
 
 
 
 
-## Improve training sample
+## Add training samples
+
+We can then use these points of high-uncertainty as new samples to add to our current training dataset.
+Once we identify their feature classes and relabel them correctly, we append them to derive an augmented `samples_round_2`.
 
 
 
@@ -347,7 +350,7 @@ plot(s2_cube_label_v2)
 
 
 
-## Review improvements
+## Remap uncertainty
 
 
 
@@ -356,15 +359,16 @@ plot(s2_cube_label_v2)
 
 ```{.r .cell-code}
 # Calculate the uncertainty cube
-s2_cube_uncert <- sits_uncertainty(
-  cube = s2_cube_bayes,
+s2_cube_uncert_v2 <- sits_uncertainty(
+  cube = s2_cube_bayes_v2,
   type = "margin",
   output_dir = "./cubes/03_error/",
+  version = "v2",
   memsize = 16,
   multicores = 4
-  )
+)
 
-plot(s2_cube_uncert)
+plot(s2_cube_uncert_v2)
 ```
 
 ::: {.cell-output-display}

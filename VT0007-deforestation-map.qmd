@@ -1,0 +1,372 @@
+---
+title: "VT0007 Jurisdictional Deforestation Risk Maps"
+date: 2024-11-04
+author: 
+  - name: Seamus Murphy
+    orcid: 0000-0002-1792-0351 
+    email: seamusrobertmurphy@gmail.com
+    degrees:
+      - PhD
+abstract: > 
+  The following workflow provides a starter script for deriving deforestation 
+  risk maps in accordance with Verra's new methodology for unplanned 
+  deforestation allocation in jurisdictional nested REDD+ projects using the 
+  [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).
+keywords:
+  - REDD+
+  - VCS
+  - Verra
+  - Carbon verification
+  - Jurisdictional
+format: 
+  html:
+    toc: true
+    toc-location: right
+    toc-title: "**Contents**"
+    toc-depth: 5
+    toc-expand: 4
+    theme: [minimal, styles.scss]
+highlight-style: github
+df-print: kable
+keep-md: true
+prefer-html: true
+bibliography: references.bib
+---
+
+```{r setup}
+#| warning: false
+#| message: false
+#| error: false
+#| include: false
+#| echo: false
+
+#install.packages("easypackages")
+easypackages::packages(
+  "animation",
+  "BIOMASS",
+  "caret", 
+  "cli", 
+  "cols4all", 
+  "covr", 
+  "cowplot",
+  "dendextend", 
+  "digest",
+  "DiagrammeR",
+  "dplyr",
+  "dtwclust", 
+  "e1071", 
+  "exactextractr", 
+  "extrafont",
+  "FNN", 
+  "future",
+  "gdalcubes", 
+  "gdalUtilities", 
+  "geojsonsf",
+  "hdf5r", 
+  "htmltools",
+  "httr", 
+  "httr2",
+  "jsonlite", 
+  "kableExtra",
+  "knitr",
+  "kohonen", 
+  "leafem", 
+  "libgeos",
+  "lintr",
+  "luz",
+  "mapedit", 
+  "mapview", 
+  "maptiles", 
+  "methods",
+  "mgcv", 
+  "ncdf4", 
+  "nnet", 
+  "openxlsx", 
+  "palette",
+  "parallel",
+  "randomForest", 
+  "rasterVis", 
+  "raster", 
+  "Rcpp", 
+  "RcppArmadillo", 
+  "RcppCensSpatial", 
+  "RcppEigen", 
+  "RcppParallel", 
+  "RColorBrewer", 
+  "rsconnect",
+  "RStoolbox", 
+  "rts", 
+  "sf", 
+  "scales", 
+  "sits",
+  "spdep", 
+  "stars", 
+  "stringr",
+  "sits",
+  "sitsdata",
+  "styler",
+  "supercells", 
+  "terra", 
+  "testthat", 
+  "tidyverse",
+  "tinytex",
+  "tmap", 
+  "tmaptools",
+  "xgboost"
+  )
+
+knitr::opts_chunk$set(
+  echo        = TRUE, 
+  message     = FALSE, 
+  warning     = FALSE, 
+  error       = TRUE, 
+  comment     = NA, 
+  tidy.opts   = list(width.cutoff = 60)
+) 
+
+base::options(
+  htmltools.dir.version = FALSE, 
+  htmltools.preserve.raw = FALSE)
+
+# switch on/off for spherical geometries
+#sf::sf_use_s2(use_s2 = TRUE)
+sf::sf_use_s2(use_s2 = FALSE)
+```
+
+```{css, echo=FALSE, class.source = 'foldable'}
+div.column {
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+}
+
+#TOC::before {
+  content: "";
+  display: block;
+  height:200px;
+  width: 200px;
+  background-size: contain;
+  background-position: 50% 50%;
+  padding-top: 80px !important;
+  background-repeat: no-repeat;
+}
+```
+
+## Summary
+
+Two workflow approaches are detailed below.
+Workflow-2 is coded using Python and Google Earth Engine functions that are more suited to larger areas of interest.
+For comparison purposes, both workflows derive outputs from the same image collection of STAC-formatted analysis-ready-data of Landsat scenes, following steps outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021 .
+Workflow-1, which is coded using the R ecosystem, allows additional model tuning functions suited to analysis of smaller areas.
+
+![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
+
+# Workflow-1
+
+## Process data cube
+
+For shawcasing purposes, we import a training dataset from the `sitsdata` package from a study of Brazil's Samuel Hydroelectric Dam in Rondonia State conducted between 2020-06-04 to 2021-08-26. To evaluate this training sample, we assemble below a data cube of Sentinel-2-L2A-COGS images from the AWS open bucket. Raster normalization is implemented with `sits_regularize` functions to apply a cloud masking and back-filling of missing pixels by cloudless ranking and global median values across 16-day intervals. 
+
+```{r}
+#| eval: false
+
+# build irregular data cube from single sentinel tile
+s2_cube_ro <- sits_cube(
+  source = "AWS",
+  collection = "SENTINEL-S2-L2A-COGS",
+  tiles = "20LMR",
+  bands = c("B02", "B8A", "B11", "SCL"),
+  start_date = as.Date("2020-06-01"),
+  end_date = as.Date("2021-09-01"),
+  progress = FALSE)
+
+# select aoi inside the tile
+roi <- c(
+  lon_max = -63.25790, lon_min = -63.6078,
+  lat_max = -8.72290, lat_min = -8.95630)
+
+# regularize the aoi filtered cube
+s2_reg_cube_ro <- sits_regularize(
+  cube = s2_cube_ro,
+  output_dir = "./cubes/reg",
+  res = 30,
+  roi = roi,
+  period = "P16D",
+  memsize = 16,
+  multicores = 4,
+  progress = FALSE)
+```
+
+## Review data cube
+
+```{r}
+#| layout-ncol: 3
+
+plot(s2_reg_cube_ro,
+  red = "B11",
+  green = "B8A",
+  blue = "B02",
+  date = "2020-07-04"
+  )
+
+plot(s2_reg_cube_ro,
+  red = "B11",
+  green = "B8A",
+  blue = "B02",
+  date = "2020-11-09"
+  )
+
+plot(s2_reg_cube_ro, 
+     red = "B11", 
+     green = "B8A", 
+     blue = "B02", 
+     date = "2021-08-08"
+     )
+```
+
+## Classify data cube
+
+We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (`Burned_Area`, `Forest`, `Highly_Degraded`, and `Cleared_Area`). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.
+
+```{r}
+library(sitsdata)
+# Load the training set
+data("samples_prodes_4classes")
+# Select the same three bands used in the data cube
+samples_4classes_3bands <- sits_select(
+  data = samples_prodes_4classes,
+  bands = c("B02", "B8A", "B11")
+  )
+
+# Train a random forest model
+rfor_model <- sits_train(
+  samples = samples_4classes_3bands,
+  ml_method = sits_rfor()
+  )
+
+# Classify the small area cube
+s2_cube_probs <- sits_classify(
+  data = s2_reg_cube_ro,
+  ml_model = rfor_model,
+  output_dir = "./cubes/class/",
+  memsize = 15,
+  multicores = 5
+  )
+
+# Post-process the probability cube
+s2_cube_bayes <- sits_smooth(
+  cube = s2_cube_probs,
+  output_dir = "./cubes/class/",
+  memsize = 16,
+  multicores = 4
+  )
+
+# Label the post-processed  probability cube
+s2_cube_label <- sits_label_classification(
+  cube = s2_cube_bayes,
+  output_dir = "./cubes/class/",
+  memsize = 16,
+  multicores = 4
+  )
+
+plot(s2_cube_label)
+```
+
+## Review uncertainty
+
+To improve model performance, we need to first calculate the uncertainty of the classification. In particular, the following confirms highest uncertainty in wetland and water areas evidently mis-classifed above.
+
+```{r}
+# Find samples with high uncertainty
+new_samples <- sits_uncertainty_sampling(
+  uncert_cube = s2_cube_uncert,
+  n = 20,
+  min_uncert = 0.5,
+  sampling_window = 10
+  )
+
+# View the location of the samples
+sits_view(new_samples)
+```
+
+## Improve training sample
+
+```{r}
+# Label the new samples
+new_samples$label <- "Wetland"
+# Obtain the time series from the regularized cube
+new_samples_ts <- sits_get_data(
+  cube = s2_reg_cube_ro,
+  samples = new_samples
+  )
+
+# Join the new samples with the original ones with 4 classes
+samples_round_2 <- dplyr::bind_rows(
+  samples_4classes_3bands,
+  new_samples_ts
+  )
+
+# Train a RF model with the new sample set
+rfor_model_v2 <- sits_train(
+  samples = samples_round_2,
+  ml_method = sits_rfor()
+  )
+
+# Classify the small area cube
+s2_cube_probs_v2 <- sits_classify(
+  data = s2_reg_cube_ro,
+  ml_model = rfor_model_v2,
+  output_dir = "./tempdir/chp12/",
+  version = "v2",
+  memsize = 16,
+  multicores = 4
+  )
+
+# Post-process the probability cube
+s2_cube_bayes_v2 <- sits_smooth(
+  cube = s2_cube_probs_v2,
+  output_dir = "./tempdir/chp12/",
+  version = "v2",
+  memsize = 16,
+  multicores = 4
+  )
+
+# Label the post-processed  probability cube
+s2_cube_label_v2 <- sits_label_classification(
+  cube = s2_cube_bayes_v2,
+  output_dir = "./tempdir/chp12/",
+  version = "v2",
+  memsize = 16,
+  multicores = 4
+  )
+
+# Plot the second version of the classified cube
+plot(s2_cube_label_v2)
+```
+
+## Review improvements
+
+
+```{r}
+# Calculate the uncertainty cube
+s2_cube_uncert <- sits_uncertainty(
+  cube = s2_cube_bayes,
+  type = "margin",
+  output_dir = "./tempdir/chp12/",
+  memsize = 16,
+  multicores = 4
+  )
+
+plot(s2_cube_uncert)
+```
+
+## Housekeeping
+
+```{r}
+#| eval: true
+# convert markdown to script.R 
+knitr::purl("VT0007-deforestation-risk-map.qmd")
+
+# display environment setup
+devtools::session_info()
+```

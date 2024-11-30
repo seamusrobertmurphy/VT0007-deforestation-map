@@ -271,7 +271,7 @@ sits_view(new_samples)
 ```
 
 ::: {.cell-output-display}
-preservedda470c8ed8bac7c
+preserveb95623e2dda56049
 :::
 :::
 
@@ -379,7 +379,214 @@ plot(s2_cube_uncert_v2)
 
 
 
-## Housekeeping
+## Accuracy assessment
+
+To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling].
+The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum.
+Alternatively, ad-hoc parameterization is suggested as follows.
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+ro_sampling_design <- sits_sampling_design(
+  cube = s2_cube_label_v2,
+  expected_ua = c(
+    "Burned_Area"       = 0.75,
+    "Cleared_Area"      = 0.70,
+    "Forest"            = 0.75,
+    "Highly_Degraded"   = 0.70,
+    "Wetland"           = 0.70
+  ),
+  alloc_options         = c(120, 100),
+  std_err               = 0.01,
+  rare_class_prop       = 0.1
+)
+# show sampling desing
+ro_sampling_design
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+                prop       expected_ua std_dev equal alloc_120 alloc_100
+Burned_Area     0.01001252 0.75        0.433   408   120       100      
+Cleared_Area    0.3680405  0.7         0.458   408   702       717      
+Forest          0.2445099  0.75        0.433   408   466       477      
+Highly_Degraded 0.04600642 0.7         0.458   408   120       100      
+Wetland         0.3314307  0.7         0.458   408   632       646      
+                alloc_prop
+Burned_Area     20        
+Cleared_Area    751       
+Forest          499       
+Highly_Degraded 94        
+Wetland         676       
+```
+
+
+:::
+:::
+
+
+
+
+## Split train/test data
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+ro_samples_sf <- sits_stratified_sampling(
+  cube                  = s2_cube_label_v2,
+  sampling_design       = ro_sampling_design,
+  alloc                 = "alloc_120",
+  multicores            = 4,
+  shp_file              = "./samples/ro_samples.shp"
+)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%
+Deleting layer `ro_samples' using driver `ESRI Shapefile'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.shp' using driver `ESRI Shapefile'
+Writing 2450 features with 1 fields and geometry type Point.
+```
+
+
+:::
+
+```{.r .cell-code}
+sf::st_write(ro_samples_sf,
+  "./samples/ro_samples.csv",
+  layer_options = "GEOMETRY=AS_XY",
+  append = FALSE # TRUE if editing existing sample
+)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+Deleting layer `ro_samples' using driver `CSV'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.csv' using driver `CSV'
+options:        GEOMETRY=AS_XY 
+Updating existing layer ro_samples
+Writing 2450 features with 1 fields and geometry type Point.
+```
+
+
+:::
+:::
+
+
+
+
+## Confusion matrix
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Calculate accuracy according to Olofsson's method
+area_acc <- sits_accuracy(s2_cube_label_v2,
+  validation = ro_samples_sf,
+  multicores = 4
+)
+# Print the area estimated accuracy
+area_acc
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+Area Weighted Statistics
+Overall Accuracy = 1
+
+Area-Weighted Users and Producers Accuracy
+                User Producer
+Burned_Area        1        1
+Cleared_Area       1        1
+Forest             1        1
+Highly_Degraded    1        1
+Wetland            1        1
+
+Mapped Area x Estimated Area (ha)
+                Mapped Area (ha) Error-Adjusted Area (ha) Conf Interval (ha)
+Burned_Area               993.51                   993.51                  0
+Cleared_Area            36519.48                 36519.48                  0
+Forest                  24261.93                 24261.93                  0
+Highly_Degraded          4565.07                  4565.07                  0
+Wetland                 32886.81                 32886.81                  0
+```
+
+
+:::
+
+```{.r .cell-code}
+# Print the confusion matrix
+area_acc$error_matrix
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+                 
+                  Burned_Area Cleared_Area Forest Highly_Degraded Wetland
+  Burned_Area             144            0      0               0       0
+  Cleared_Area              0          843      0               0       0
+  Forest                    0            0    560               0       0
+  Highly_Degraded           0            0      0             144       0
+  Wetland                   0            0      0               0     759
+```
+
+
+:::
+:::
+
+
+
+
+## Times series visualization
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+summary(as.data.frame(ro_samples_sf))
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+    label                    geometry   
+ Length:2450        POINT        :2450  
+ Class :character   epsg:4326    :   0  
+ Mode  :character   +proj=long...:   0  
+```
+
+
+:::
+:::
+
+
+
+
+#### Housekeeping
 
 
 
@@ -418,7 +625,7 @@ devtools::session_info()
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       America/Vancouver
- date     2024-11-29
+ date     2024-11-30
  pandoc   3.5 @ /usr/local/bin/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────

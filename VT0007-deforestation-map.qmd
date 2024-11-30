@@ -363,7 +363,70 @@ s2_cube_uncert_v2 <- sits_uncertainty(
 plot(s2_cube_uncert_v2)
 ```
 
-## Housekeeping
+## Accuracy assessment
+
+To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling].
+The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum.
+Alternatively, ad-hoc parameterization is suggested as follows.
+
+```{r}
+ro_sampling_design <- sits_sampling_design(
+  cube = s2_cube_label_v2,
+  expected_ua = c(
+    "Burned_Area"       = 0.75,
+    "Cleared_Area"      = 0.70,
+    "Forest"            = 0.75,
+    "Highly_Degraded"   = 0.70,
+    "Wetland"           = 0.70
+  ),
+  alloc_options         = c(120, 100),
+  std_err               = 0.01,
+  rare_class_prop       = 0.1
+)
+# show sampling desing
+ro_sampling_design
+```
+
+## Split train/test data
+
+```{r}
+ro_samples_sf <- sits_stratified_sampling(
+  cube                  = s2_cube_label_v2,
+  sampling_design       = ro_sampling_design,
+  alloc                 = "alloc_120",
+  multicores            = 4,
+  shp_file              = "./samples/ro_samples.shp"
+)
+
+sf::st_write(ro_samples_sf,
+  "./samples/ro_samples.csv",
+  layer_options = "GEOMETRY=AS_XY",
+  append = FALSE # TRUE if editing existing sample
+)
+```
+
+## Confusion matrix
+
+```{r}
+# Calculate accuracy according to Olofsson's method
+area_acc <- sits_accuracy(s2_cube_label_v2,
+  validation = ro_samples_sf,
+  multicores = 4
+)
+# Print the area estimated accuracy
+area_acc
+
+# Print the confusion matrix
+area_acc$error_matrix
+```
+
+## Times series visualization
+
+```{r}
+summary(as.data.frame(ro_samples_sf))
+```
+
+#### Housekeeping
 
 ```{r}
 #| eval: true

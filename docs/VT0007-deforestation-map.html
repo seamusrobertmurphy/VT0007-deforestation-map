@@ -187,7 +187,13 @@ div.csl-indent {
   <li><a href="#map-uncertainty" id="toc-map-uncertainty" class="nav-link" data-scroll-target="#map-uncertainty">Map uncertainty</a></li>
   <li><a href="#add-training-samples" id="toc-add-training-samples" class="nav-link" data-scroll-target="#add-training-samples">Add training samples</a></li>
   <li><a href="#remap-uncertainty" id="toc-remap-uncertainty" class="nav-link" data-scroll-target="#remap-uncertainty">Remap uncertainty</a></li>
+  <li><a href="#accuracy-assessment" id="toc-accuracy-assessment" class="nav-link" data-scroll-target="#accuracy-assessment">Accuracy assessment</a></li>
+  <li><a href="#split-traintest-data" id="toc-split-traintest-data" class="nav-link" data-scroll-target="#split-traintest-data">Split train/test data</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion matrix</a></li>
+  <li><a href="#times-series-visualization" id="toc-times-series-visualization" class="nav-link" data-scroll-target="#times-series-visualization">Times series visualization</a>
+  <ul>
   <li><a href="#housekeeping" id="toc-housekeeping" class="nav-link" data-scroll-target="#housekeeping">Housekeeping</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -407,8 +413,8 @@ div.csl-indent {
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View the location of the samples</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sits_view</span>(new_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p></p><div class="leaflet html-widget html-fill-item" id="htmlwidget-e70202e8d3b467e96614" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-e70202e8d3b467e96614">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["GeoportailFrance.orthos",null,"GeoPortalFrance",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"ESRI",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OSM",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addWMSTiles","args":["https://tiles.maps.eox.at/wms/",null,"Sentinel-2-2020",{"styles":"","format":"image/jpeg","transparent":false,"version":"1.1.1","layers":"s2cloudless-2020_3857_512"}]},{"method":"addCircleMarkers","args":[[-8.92351118287716,-8.924053884649068,-8.909403066336498,-8.893116517299164,-8.926767588756658,-8.948366862987008,-8.907503608107625,-8.933446747014161,-8.94728176062786,-8.922153644841517,-8.837769447713717,-8.823078520582468,-8.841023783947298,-8.89121606515072,-8.906958771229483,-8.941690109834905,-8.943047454426987,-8.91320217519443,-8.838311775794294,-8.912930824080131],[-63.26613924478765,-63.26613963803149,-63.26312745685119,-63.27075584987046,-63.26586872154951,-63.38896128408974,-63.26312609845306,-63.38512506249781,-63.38868723652695,-63.26722978031285,-63.25843853879831,-63.30862465695516,-63.26116900602962,-63.27211873761381,-63.26612726280296,-63.26833558518532,-63.2675178930804,-63.26285730148435,-63.25898455260065,-63.26285710752428],4,null,"Samples",{"interactive":true,"className":"","stroke":false,"color":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"fillOpacity":1},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["ESRI","GeoPortalFrance","Sentinel-2-2020","OSM"],"Samples",{"collapsed":false,"autoZIndex":true,"position":"topright"}]},{"method":"addLegend","args":[{"colors":["#C7A76C"],"labels":["NoClass"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"Training Samples","extra":null,"layerId":null,"className":"info legend","group":null}]}],"flyToBounds":[-8.948366862987008,-63.38896128408974,-8.823078520582468,-63.25843853879831,[]],"limits":{"lat":[-8.948366862987008,-8.823078520582468],"lng":[-63.38896128408974,-63.25843853879831]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script><p></p>
+<p></p><div class="leaflet html-widget html-fill-item" id="htmlwidget-f04210a3cee492a660ff" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-f04210a3cee492a660ff">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["GeoportailFrance.orthos",null,"GeoPortalFrance",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"ESRI",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OSM",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addWMSTiles","args":["https://tiles.maps.eox.at/wms/",null,"Sentinel-2-2020",{"styles":"","format":"image/jpeg","transparent":false,"version":"1.1.1","layers":"s2cloudless-2020_3857_512"}]},{"method":"addCircleMarkers","args":[[-8.92351118287716,-8.924053884649068,-8.909403066336498,-8.893116517299164,-8.926767588756658,-8.948366862987008,-8.907503608107625,-8.933446747014161,-8.94728176062786,-8.922153644841517,-8.837769447713717,-8.823078520582468,-8.841023783947298,-8.89121606515072,-8.906958771229483,-8.941690109834905,-8.943047454426987,-8.91320217519443,-8.838311775794294,-8.912930824080131],[-63.26613924478765,-63.26613963803149,-63.26312745685119,-63.27075584987046,-63.26586872154951,-63.38896128408974,-63.26312609845306,-63.38512506249781,-63.38868723652695,-63.26722978031285,-63.25843853879831,-63.30862465695516,-63.26116900602962,-63.27211873761381,-63.26612726280296,-63.26833558518532,-63.2675178930804,-63.26285730148435,-63.25898455260065,-63.26285710752428],4,null,"Samples",{"interactive":true,"className":"","stroke":false,"color":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"fillOpacity":1},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["ESRI","GeoPortalFrance","Sentinel-2-2020","OSM"],"Samples",{"collapsed":false,"autoZIndex":true,"position":"topright"}]},{"method":"addLegend","args":[{"colors":["#C7A76C"],"labels":["NoClass"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"Training Samples","extra":null,"layerId":null,"className":"info legend","group":null}]}],"flyToBounds":[-8.948366862987008,-63.38896128408974,-8.823078520582468,-63.25843853879831,[]],"limits":{"lat":[-8.948366862987008,-8.823078520582468],"lng":[-63.38896128408974,-63.25843853879831]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script><p></p>
 </div>
 </div>
 </section>
@@ -499,16 +505,141 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="housekeeping" class="level2">
-<h2 class="anchored" data-anchor-id="housekeeping">Housekeeping</h2>
+<section id="accuracy-assessment" class="level2">
+<h2 class="anchored" data-anchor-id="accuracy-assessment">Accuracy assessment</h2>
+<p>To select a validation subset of the map, <code>sits</code> recommends Cochran’s method for stratified random sampling <span class="citation" data-cites="cochran1977sampling">(<a href="#ref-cochran1977sampling" role="doc-biblioref">Cochran 1977</a>)</span>. The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum. Alternatively, ad-hoc parameterization is suggested as follows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert markdown to script.R </span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">"VT0007-deforestation-risk-map.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ro_sampling_design <span class="ot">&lt;-</span> <span class="fu">sits_sampling_design</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_label_v2,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">expected_ua =</span> <span class="fu">c</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Burned_Area"</span>       <span class="ot">=</span> <span class="fl">0.75</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cleared_Area"</span>      <span class="ot">=</span> <span class="fl">0.70</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Forest"</span>            <span class="ot">=</span> <span class="fl">0.75</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Highly_Degraded"</span>   <span class="ot">=</span> <span class="fl">0.70</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wetland"</span>           <span class="ot">=</span> <span class="fl">0.70</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">alloc_options         =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">100</span>),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std_err               =</span> <span class="fl">0.01</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rare_class_prop       =</span> <span class="fl">0.1</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># show sampling desing</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>ro_sampling_design</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                prop       expected_ua std_dev equal alloc_120 alloc_100
+Burned_Area     0.01001252 0.75        0.433   408   120       100      
+Cleared_Area    0.3680405  0.7         0.458   408   702       717      
+Forest          0.2445099  0.75        0.433   408   466       477      
+Highly_Degraded 0.04600642 0.7         0.458   408   120       100      
+Wetland         0.3314307  0.7         0.458   408   632       646      
+                alloc_prop
+Burned_Area     20        
+Cleared_Area    751       
+Forest          499       
+Highly_Degraded 94        
+Wetland         676       </code></pre>
+</div>
+</div>
+</section>
+<section id="split-traintest-data" class="level2">
+<h2 class="anchored" data-anchor-id="split-traintest-data">Split train/test data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ro_samples_sf <span class="ot">&lt;-</span> <span class="fu">sits_stratified_sampling</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube                  =</span> s2_cube_label_v2,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampling_design       =</span> ro_sampling_design,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alloc                 =</span> <span class="st">"alloc_120"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores            =</span> <span class="dv">4</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">shp_file              =</span> <span class="st">"./samples/ro_samples.shp"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%
+Deleting layer `ro_samples' using driver `ESRI Shapefile'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.shp' using driver `ESRI Shapefile'
+Writing 2450 features with 1 fields and geometry type Point.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(ro_samples_sf,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"./samples/ro_samples.csv"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer_options =</span> <span class="st">"GEOMETRY=AS_XY"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">append =</span> <span class="cn">FALSE</span> <span class="co"># TRUE if editing existing sample</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Deleting layer `ro_samples' using driver `CSV'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.csv' using driver `CSV'
+options:        GEOMETRY=AS_XY 
+Updating existing layer ro_samples
+Writing 2450 features with 1 fields and geometry type Point.</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate accuracy according to Olofsson's method</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>area_acc <span class="ot">&lt;-</span> <span class="fu">sits_accuracy</span>(s2_cube_label_v2,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation =</span> ro_samples_sf,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the area estimated accuracy</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>area_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area Weighted Statistics
+Overall Accuracy = 1
+
+Area-Weighted Users and Producers Accuracy
+                User Producer
+Burned_Area        1        1
+Cleared_Area       1        1
+Forest             1        1
+Highly_Degraded    1        1
+Wetland            1        1
+
+Mapped Area x Estimated Area (ha)
+                Mapped Area (ha) Error-Adjusted Area (ha) Conf Interval (ha)
+Burned_Area               993.51                   993.51                  0
+Cleared_Area            36519.48                 36519.48                  0
+Forest                  24261.93                 24261.93                  0
+Highly_Degraded          4565.07                  4565.07                  0
+Wetland                 32886.81                 32886.81                  0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the confusion matrix</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>area_acc<span class="sc">$</span>error_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 
+                  Burned_Area Cleared_Area Forest Highly_Degraded Wetland
+  Burned_Area             144            0      0               0       0
+  Cleared_Area              0          843      0               0       0
+  Forest                    0            0    560               0       0
+  Highly_Degraded           0            0      0             144       0
+  Wetland                   0            0      0               0     759</code></pre>
+</div>
+</div>
+</section>
+<section id="times-series-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="times-series-visualization">Times series visualization</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">as.data.frame</span>(ro_samples_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    label                    geometry   
+ Length:2450        POINT        :2450  
+ Class :character   epsg:4326    :   0  
+ Mode  :character   +proj=long...:   0  </code></pre>
+</div>
+</div>
+<section id="housekeeping" class="level4">
+<h4 class="anchored" data-anchor-id="housekeeping">Housekeeping</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert markdown to script.R </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">"VT0007-deforestation-risk-map.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in file(con, "r"): cannot open the connection</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display environment setup</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display environment setup</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
@@ -520,7 +651,7 @@ div.csl-indent {
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       America/Vancouver
- date     2024-11-29
+ date     2024-11-30
  pandoc   3.5 @ /usr/local/bin/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
@@ -788,10 +919,14 @@ div.csl-indent {
 
 </section>
 </section>
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-camaraUncertaintyActiveLearning" class="csl-entry" role="listitem">
 Camara, Gilberto, Rolf Simoes, Felipe Souza, Felipe Menino, Charlotte Pelletier, Pedro R. Andrade, Karine Ferreira, and Gilberto Queiroz. n.d. <em>Uncertainty and Active Learning | Sits: Satellite Image Time Series Analysis on Earth Observation Data Cubes</em>. <a href="https://e-sensing.github.io/sitsbook/uncertainty-and-active-learning.html#uncertainty-and-active-learning">https://e-sensing.github.io/sitsbook/uncertainty-and-active-learning.html#uncertainty-and-active-learning</a>.
+</div>
+<div id="ref-cochran1977sampling" class="csl-entry" role="listitem">
+Cochran, William G. 1977. <span>“Sampling Techniques.”</span> <em>Johan Wiley &amp; Sons Inc</em>.
 </div>
 <div id="ref-verraVT0007UnplannedDeforestation2021" class="csl-entry" role="listitem">
 Verra. 2021. <span>“VT0007 Unplanned Deforestation Allocation Tool.”</span>

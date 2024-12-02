@@ -62,6 +62,7 @@ easypackages::packages(
   "gdalcubes", 
   "gdalUtilities", 
   "geojsonsf",
+  "googledrive",
   "hdf5r", 
   "htmltools",
   "httr", 
@@ -93,6 +94,9 @@ easypackages::packages(
   "RcppEigen", 
   "RcppParallel", 
   "RColorBrewer", 
+  "reticulate",
+  "rgee",
+  "rgeeExtra",
   "rsconnect",
   "RStoolbox", 
   "rts", 
@@ -142,7 +146,7 @@ Workflow-1, which is coded using the R ecosystem, allows additional model tuning
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
-# 1. Workflow in R
+# 1. Workflow in R -\> `sits`
 
 ## Process data cube
 
@@ -424,6 +428,25 @@ area_acc$error_matrix
 
 ```{r}
 summary(as.data.frame(ro_samples_sf))
+```
+
+## Deforestation binary map
+
+## Deforestation risk map
+
+# 2. Workflow in Python -\> `GEE`
+
+```{r}
+#| eval: false
+# Set your Python ENV
+Sys.setenv("RETICULATE_PYTHON" = "/usr/bin/python3")
+# Set Google Cloud SDK 
+Sys.setenv("EARTHENGINE_GCLOUD" = "~/seamus/google-cloud-sdk/bin/")
+
+library(rgee) 
+ee_Authenticate()
+ee_install_upgrade()
+ee_Initialize()
 ```
 
 #### Housekeeping

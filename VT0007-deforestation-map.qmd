@@ -37,7 +37,6 @@ bibliography: references.bib
 #| warning: false
 #| message: false
 #| error: false
-#| include: false
 #| echo: false
 
 #install.packages("easypackages")
@@ -178,7 +177,7 @@ cube_raw = sits::sits_cube(
   progress    = T
   )
 
-# optional: localize cube for faster processing
+# optional: localize for faster processing
 cube_local = sits::sits_cube_copy(
   cube        = cube_raw,
   roi         = aoi_country,

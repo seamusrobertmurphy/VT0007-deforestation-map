@@ -1,5 +1,5 @@
 ---
-title: "VT0007 Jurisdictional Deforestation Risk Maps"
+title: "Jurisdictional Allocation & Deforestation Risk Maps"
 date: 2024-11-04
 author: 
   - name: Seamus Murphy
@@ -41,14 +41,14 @@ bibliography: references.bib
 
 ## Summary
 
-Two workflow approaches are detailed below.
-Workflow-2 is coded using Python and Google Earth Engine functions that are more suited to larger areas of interest.
-For comparison purposes, both workflows derive outputs from the same image collection of STAC-formatted analysis-ready-data of Landsat scenes, following steps outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021 .
-Workflow-1, which is coded using the R ecosystem, allows additional model tuning functions suited to analysis of smaller areas.
+Two workflow approaches are detailed below following similar steps to those outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows are derived using same sources of training sample dataset [@stanimirovaGlobalLandCover2023] and collection of STAC-formatted analysis-ready-data of Landsat imagery.
+
+Workflow-1 is coded within the R ecosystem and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation.
+Workflow-2, which is coded using Python and Google Earth Engine functions, is recommended for larger areas of interest ( (***Java transcription pending, link here***).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
-# 1. Workflow in R
+# 1. Workflow in R -\> `sits`
 
 ## Process data cube
 
@@ -168,6 +168,7 @@ Training samples are fitted to a Random Forest model and post-processed with a B
 
 ```{.r .cell-code}
 # Load the training set
+glance_training = "https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"
 data("samples_prodes_4classes")
 # Select the same three bands used in the data cube
 samples_4classes_3bands <- sits_select(
@@ -271,7 +272,7 @@ sits_view(new_samples)
 ```
 
 ::: {.cell-output-display}
-preserveb95623e2dda56049
+preserve85ca887ffa1fe88f
 :::
 :::
 
@@ -586,6 +587,33 @@ summary(as.data.frame(ro_samples_sf))
 
 
 
+## Deforestation binary map
+
+## Deforestation risk map
+
+# 2. Workflow in Python -\> `GEE`
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Set your Python ENV
+Sys.setenv("RETICULATE_PYTHON" = "/usr/bin/python3")
+# Set Google Cloud SDK 
+Sys.setenv("EARTHENGINE_GCLOUD" = "~/seamus/google-cloud-sdk/bin/")
+
+library(rgee) 
+ee_Authenticate()
+ee_install_upgrade()
+ee_Initialize()
+```
+:::
+
+
+
+
 #### Housekeeping
 
 
@@ -625,7 +653,7 @@ devtools::session_info()
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       America/Vancouver
- date     2024-11-30
+ date     2024-12-03
  pandoc   3.5 @ /usr/local/bin/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
@@ -697,6 +725,7 @@ devtools::session_info()
  future.apply         1.11.3     2024-10-27 [1] CRAN (R 4.4.1)
  FuzzyNumbers         0.4-7      2021-11-15 [1] CRAN (R 4.4.0)
  FuzzyNumbers.Ext.2   3.2        2017-09-05 [1] CRAN (R 4.4.0)
+ gargle               1.5.2      2023-07-20 [1] CRAN (R 4.4.0)
  gdalcubes          * 0.7.0      2024-03-07 [1] CRAN (R 4.4.0)
  gdalUtilities      * 1.2.5      2023-08-10 [1] CRAN (R 4.4.0)
  generics             0.1.3      2022-07-05 [1] CRAN (R 4.4.0)
@@ -706,6 +735,7 @@ devtools::session_info()
  globals              0.16.3     2024-03-08 [1] CRAN (R 4.4.0)
  glue                 1.8.0      2024-09-30 [1] CRAN (R 4.4.1)
  gmm                  1.8        2023-06-06 [1] CRAN (R 4.4.0)
+ googledrive        * 2.1.1      2023-06-11 [1] CRAN (R 4.4.0)
  gower                1.0.1      2022-12-22 [1] CRAN (R 4.4.0)
  gridExtra            2.3        2017-09-09 [1] CRAN (R 4.4.0)
  gtable               0.3.6      2024-10-25 [1] CRAN (R 4.4.1)
@@ -808,7 +838,10 @@ devtools::session_info()
  relliptical          1.3.0      2024-02-07 [1] CRAN (R 4.4.0)
  remotes              2.5.0      2024-03-17 [1] CRAN (R 4.4.0)
  reshape2             1.4.4      2020-04-09 [1] CRAN (R 4.4.0)
+ reticulate         * 1.40.0     2024-11-15 [1] CRAN (R 4.4.1)
  rex                  1.2.1      2021-11-26 [1] CRAN (R 4.4.0)
+ rgee               * 1.1.7      2024-11-30 [1] Github (r-spatial/rgee@bca9655)
+ rgeeExtra          * 0.1.0      2024-11-30 [1] Github (r-earthengine/rgeeExtra@7ea67d0)
  rlang                1.1.4      2024-06-04 [1] CRAN (R 4.4.0)
  rmarkdown            2.29       2024-11-04 [1] CRAN (R 4.4.1)
  rpart                4.1.23     2023-12-05 [1] CRAN (R 4.4.2)

@@ -1,5 +1,5 @@
 ---
-title: "VT0007 Jurisdictional Deforestation Risk Maps"
+title: "JNR Deforestation Risk Maps"
 date: 2024-11-04
 author: 
   - name: Seamus Murphy
@@ -8,7 +8,7 @@ author:
     degrees:
       - PhD
 abstract: > 
-  The following workflow provides a starter script for deriving deforestation 
+  The following starter script documents two workflows for deriving deforestation 
   risk maps in accordance with Verra's new methodology for unplanned 
   deforestation allocation in jurisdictional nested REDD+ projects using the 
   [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).

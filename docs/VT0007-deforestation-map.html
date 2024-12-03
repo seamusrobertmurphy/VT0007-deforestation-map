@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Seamus Murphy">
+<meta name="dcterms.date" content="2024-11-04">
+<meta name="keywords" content="REDD+, VCS, Verra, Carbon verification, Jurisdictional">
+
+<title>Jurisdictional Allocation &amp; Deforestation Risk Maps – VT0007</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-722b7ecd703fa194e825a0d619ad685e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-05471e2d35c82c0b78e5a6b25c716131.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="site_libs/jquery/jquery-3.6.0.min.js"></script>
+<link href="site_libs/leaflet/leaflet.css" rel="stylesheet">
+<script src="site_libs/leaflet/leaflet.js"></script>
+<link href="site_libs/leafletfix/leafletfix.css" rel="stylesheet">
+<script src="site_libs/proj4/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet">
+<script src="site_libs/leaflet-binding/leaflet.js"></script>
+<script src="site_libs/leaflet-providers/leaflet-providers_2.0.0.js"></script>
+<script src="site_libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
+<script src="site_libs/clipboard/setClipboardText.js"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">VT0007</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./VT0007-deforestation-map.html" aria-current="page"> 
+<span class="menu-text">Jurisdictional Allocation &amp; Deforestation Risk Maps</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title"><strong>Contents</strong></h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#workflow-in-r---sits" id="toc-workflow-in-r---sits" class="nav-link" data-scroll-target="#workflow-in-r---sits">1. Workflow in R -&gt; <code>sits</code></a>
+  <ul>
+  <li><a href="#process-data-cube" id="toc-process-data-cube" class="nav-link" data-scroll-target="#process-data-cube">Process data cube</a></li>
+  <li><a href="#review-data-cube" id="toc-review-data-cube" class="nav-link" data-scroll-target="#review-data-cube">Review data cube</a></li>
+  <li><a href="#classify-data-cube" id="toc-classify-data-cube" class="nav-link" data-scroll-target="#classify-data-cube">Classify data cube</a></li>
+  <li><a href="#map-uncertainty" id="toc-map-uncertainty" class="nav-link" data-scroll-target="#map-uncertainty">Map uncertainty</a></li>
+  <li><a href="#add-training-samples" id="toc-add-training-samples" class="nav-link" data-scroll-target="#add-training-samples">Add training samples</a></li>
+  <li><a href="#remap-uncertainty" id="toc-remap-uncertainty" class="nav-link" data-scroll-target="#remap-uncertainty">Remap uncertainty</a></li>
+  <li><a href="#accuracy-assessment" id="toc-accuracy-assessment" class="nav-link" data-scroll-target="#accuracy-assessment">Accuracy assessment</a></li>
+  <li><a href="#split-traintest-data" id="toc-split-traintest-data" class="nav-link" data-scroll-target="#split-traintest-data">Split train/test data</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion matrix</a></li>
+  <li><a href="#times-series-visualization" id="toc-times-series-visualization" class="nav-link" data-scroll-target="#times-series-visualization">Times series visualization</a></li>
+  <li><a href="#deforestation-binary-map" id="toc-deforestation-binary-map" class="nav-link" data-scroll-target="#deforestation-binary-map">Deforestation binary map</a></li>
+  <li><a href="#deforestation-risk-map" id="toc-deforestation-risk-map" class="nav-link" data-scroll-target="#deforestation-risk-map">Deforestation risk map</a></li>
+  </ul></li>
+  <li><a href="#workflow-in-python---gee" id="toc-workflow-in-python---gee" class="nav-link" data-scroll-target="#workflow-in-python---gee">2. Workflow in Python -&gt; <code>GEE</code></a>
+  <ul>
+  <li><a href="#housekeeping" id="toc-housekeeping" class="nav-link" data-scroll-target="#housekeeping">Housekeeping</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Jurisdictional Allocation &amp; Deforestation Risk Maps</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Seamus Murphy, PhD <a href="mailto:seamusrobertmurphy@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-1792-0351" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 4, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    <p>The following workflow provides a starter script for deriving deforestation risk maps in accordance with Verra’s new methodology for unplanned deforestation allocation in jurisdictional nested REDD+ projects using the <a href="https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf">VT0007 toolset</a>.</p>
+  </div>
+</div>
+
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>REDD+, VCS, Verra, Carbon verification, Jurisdictional</p>
+  </div>
+</div>
+
+</header>
+
+
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>Two workflow approaches are detailed below following similar steps to those outlined in Verra’s recommended sequence of deforestation risk map development <span class="citation" data-cites="verraVT0007UnplannedDeforestation2021">Verra (<a href="#ref-verraVT0007UnplannedDeforestation2021" role="doc-biblioref">2021</a>)</span>. For comparison purposes, both workflows are derived using same sources of training sample dataset <span class="citation" data-cites="stanimirovaGlobalLandCover2023">(<a href="#ref-stanimirovaGlobalLandCover2023" role="doc-biblioref">Stanimirova et al. 2023</a>)</span> and collection of STAC-formatted analysis-ready-data of Landsat imagery.</p>
+<p>Workflow-1 is coded within the R ecosystem and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation. Workflow-2, which is coded using Python and Google Earth Engine functions, is recommended for larger areas of interest ( (<strong><em>Java transcription pending, link here</em></strong>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VT0007-risk-map-development-sequence.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1: Verra’s recommended risk map development sequence (VT0007:6)</figcaption>
+</figure>
+</div>
+</section>
+<section id="workflow-in-r---sits" class="level1">
+<h1>1. Workflow in R -&gt; <code>sits</code></h1>
+<section id="process-data-cube" class="level2">
+<h2 class="anchored" data-anchor-id="process-data-cube">Process data cube</h2>
+<p>For shawcasing purposes, we import a training dataset from the <code>sitsdata</code> package from a study of Brazil’s Samuel Hydroelectric Dam in Rondonia State conducted between 2020-06-04 to 2021-08-26. To evaluate this training sample, we assemble below a data cube of Sentinel-2-L2A-COGS images from the AWS open bucket. Raster normalization is implemented with <code>sits_regularize</code> functions to apply a cloud masking and back-filling of missing pixels by cloudless ranking and global median values across 16-day intervals.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># build irregular data cube from single sentinel tile</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>s2_cube_ro <span class="ot">&lt;-</span> <span class="fu">sits_cube</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">"AWS"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">collection =</span> <span class="st">"SENTINEL-S2-L2A-COGS"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tiles =</span> <span class="st">"20LMR"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">bands =</span> <span class="fu">c</span>(<span class="st">"B02"</span>, <span class="st">"B8A"</span>, <span class="st">"B11"</span>, <span class="st">"SCL"</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">start_date =</span> <span class="fu">as.Date</span>(<span class="st">"2020-06-01"</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_date =</span> <span class="fu">as.Date</span>(<span class="st">"2021-09-01"</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select aoi inside the tile</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>roi <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon_max =</span> <span class="sc">-</span><span class="fl">63.25790</span>, <span class="at">lon_min =</span> <span class="sc">-</span><span class="fl">63.6078</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat_max =</span> <span class="sc">-</span><span class="fl">8.72290</span>, <span class="at">lat_min =</span> <span class="sc">-</span><span class="fl">8.95630</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># regularize the aoi filtered cube</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>s2_reg_cube_ro <span class="ot">&lt;-</span> <span class="fu">sits_regularize</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_ro,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/01_reg"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">res =</span> <span class="dv">30</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">roi =</span> roi,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">period =</span> <span class="st">"P16D"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="review-data-cube" class="level2">
+<h2 class="anchored" data-anchor-id="review-data-cube">Review data cube</h2>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_reg_cube_ro,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">red =</span> <span class="st">"B11"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">green =</span> <span class="st">"B8A"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">blue =</span> <span class="st">"B02"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">date =</span> <span class="st">"2020-07-04"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_reg_cube_ro,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">red =</span> <span class="st">"B11"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">green =</span> <span class="st">"B8A"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">blue =</span> <span class="st">"B02"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">date =</span> <span class="st">"2020-11-09"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_reg_cube_ro, </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">red =</span> <span class="st">"B11"</span>, </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">green =</span> <span class="st">"B8A"</span>, </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">blue =</span> <span class="st">"B02"</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">date =</span> <span class="st">"2021-08-08"</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="classify-data-cube" class="level2">
+<h2 class="anchored" data-anchor-id="classify-data-cube">Classify data cube</h2>
+<p>We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (<code>Burned_Area</code>, <code>Forest</code>, <code>Highly_Degraded</code>, and <code>Cleared_Area</code>). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the training set</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>glance_training <span class="ot">=</span> <span class="st">"https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"samples_prodes_4classes"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the same three bands used in the data cube</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>samples_4classes_3bands <span class="ot">&lt;-</span> <span class="fu">sits_select</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> samples_prodes_4classes,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">bands =</span> <span class="fu">c</span>(<span class="st">"B02"</span>, <span class="st">"B8A"</span>, <span class="st">"B11"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a random forest model</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>rfor_model <span class="ot">&lt;-</span> <span class="fu">sits_train</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> samples_4classes_3bands,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ml_method =</span> <span class="fu">sits_rfor</span>()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify the small area cube</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>s2_cube_probs <span class="ot">&lt;-</span> <span class="fu">sits_classify</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s2_reg_cube_ro,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">ml_model =</span> rfor_model,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/02_class/"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">15</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">5</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-process the probability cube</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>s2_cube_bayes <span class="ot">&lt;-</span> <span class="fu">sits_smooth</span>(</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_probs,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/02_class/"</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Label the post-processed  probability cube</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>s2_cube_label <span class="ot">&lt;-</span> <span class="fu">sits_label_classification</span>(</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_bayes,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/02_class/"</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_cube_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="map-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="map-uncertainty">Map uncertainty</h2>
+<p>To improve model performance, we estimate class uncertainty and plot these pixel error metrics. Results below reveal highest uncertainty levels in classification of wetland and water areas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the uncertainty cube</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>s2_cube_uncert <span class="ot">&lt;-</span> <span class="fu">sits_uncertainty</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_bayes,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"margin"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/03_error/"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_cube_uncert)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As expected, the places of highest uncertainty are those covered by surface water or associated with wetlands. These places are likely to be misclassified. For this reason, sits provides <code>sits_uncertainty_sampling()</code>, which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty <span class="citation" data-cites="camaraUncertaintyActiveLearning">(<a href="#ref-camaraUncertaintyActiveLearning" role="doc-biblioref">Camara et al., n.d.</a>)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find samples with high uncertainty</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>new_samples <span class="ot">&lt;-</span> <span class="fu">sits_uncertainty_sampling</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">uncert_cube =</span> s2_cube_uncert,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">20</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_uncert =</span> <span class="fl">0.5</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampling_window =</span> <span class="dv">10</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View the location of the samples</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sits_view</span>(new_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p></p><div class="leaflet html-widget html-fill-item" id="htmlwidget-b573eeb9d4ecb8bac947" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b573eeb9d4ecb8bac947">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["GeoportailFrance.orthos",null,"GeoPortalFrance",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"ESRI",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OSM",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addWMSTiles","args":["https://tiles.maps.eox.at/wms/",null,"Sentinel-2-2020",{"styles":"","format":"image/jpeg","transparent":false,"version":"1.1.1","layers":"s2cloudless-2020_3857_512"}]},{"method":"addCircleMarkers","args":[[-8.92351118287716,-8.924053884649068,-8.909403066336498,-8.893116517299164,-8.926767588756658,-8.948366862987008,-8.907503608107625,-8.933446747014161,-8.94728176062786,-8.922153644841517,-8.837769447713717,-8.823078520582468,-8.841023783947298,-8.89121606515072,-8.906958771229483,-8.941690109834905,-8.943047454426987,-8.91320217519443,-8.838311775794294,-8.912930824080131],[-63.26613924478765,-63.26613963803149,-63.26312745685119,-63.27075584987046,-63.26586872154951,-63.38896128408974,-63.26312609845306,-63.38512506249781,-63.38868723652695,-63.26722978031285,-63.25843853879831,-63.30862465695516,-63.26116900602962,-63.27211873761381,-63.26612726280296,-63.26833558518532,-63.2675178930804,-63.26285730148435,-63.25898455260065,-63.26285710752428],4,null,"Samples",{"interactive":true,"className":"","stroke":false,"color":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C","#C7A76C"],"fillOpacity":1},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["ESRI","GeoPortalFrance","Sentinel-2-2020","OSM"],"Samples",{"collapsed":false,"autoZIndex":true,"position":"topright"}]},{"method":"addLegend","args":[{"colors":["#C7A76C"],"labels":["NoClass"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"Training Samples","extra":null,"layerId":null,"className":"info legend","group":null}]}],"flyToBounds":[-8.948366862987008,-63.38896128408974,-8.823078520582468,-63.25843853879831,[]],"limits":{"lat":[-8.948366862987008,-8.823078520582468],"lng":[-63.38896128408974,-63.25843853879831]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script><p></p>
+</div>
+</div>
+</section>
+<section id="add-training-samples" class="level2">
+<h2 class="anchored" data-anchor-id="add-training-samples">Add training samples</h2>
+<p>We can then use these points of high-uncertainty as new samples to add to our current training dataset. Once we identify their feature classes and relabel them correctly, we append them to derive an augmented <code>samples_round_2</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Label the new samples</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>new_samples<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="st">"Wetland"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtain the time series from the regularized cube</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>new_samples_ts <span class="ot">&lt;-</span> <span class="fu">sits_get_data</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_reg_cube_ro,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> new_samples</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new class to original samples</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>samples_round_2 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  samples_4classes_3bands,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  new_samples_ts</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a RF model with the new sample set</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>rfor_model_v2 <span class="ot">&lt;-</span> <span class="fu">sits_train</span>(</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> samples_round_2,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">ml_method =</span> <span class="fu">sits_rfor</span>()</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify the small area cube</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>s2_cube_probs_v2 <span class="ot">&lt;-</span> <span class="fu">sits_classify</span>(</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s2_reg_cube_ro,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">ml_model =</span> rfor_model_v2,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/02_class/"</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"v2"</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-process the probability cube</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>s2_cube_bayes_v2 <span class="ot">&lt;-</span> <span class="fu">sits_smooth</span>(</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_probs_v2,</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/04_smooth/"</span>,</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"v2"</span>,</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Label the post-processed  probability cube</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>s2_cube_label_v2 <span class="ot">&lt;-</span> <span class="fu">sits_label_classification</span>(</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_bayes_v2,</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/05_tuned/"</span>,</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"v2"</span>,</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the second version of the classified cube</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_cube_label_v2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="remap-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="remap-uncertainty">Remap uncertainty</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the uncertainty cube</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>s2_cube_uncert_v2 <span class="ot">&lt;-</span> <span class="fu">sits_uncertainty</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_bayes_v2,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"margin"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">"./cubes/03_error/"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"v2"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">memsize =</span> <span class="dv">16</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s2_cube_uncert_v2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="VT0007-deforestation-map_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="accuracy-assessment" class="level2">
+<h2 class="anchored" data-anchor-id="accuracy-assessment">Accuracy assessment</h2>
+<p>To select a validation subset of the map, <code>sits</code> recommends Cochran’s method for stratified random sampling <span class="citation" data-cites="cochran1977sampling">(<a href="#ref-cochran1977sampling" role="doc-biblioref">Cochran 1977</a>)</span>. The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum. Alternatively, ad-hoc parameterization is suggested as follows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ro_sampling_design <span class="ot">&lt;-</span> <span class="fu">sits_sampling_design</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube =</span> s2_cube_label_v2,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">expected_ua =</span> <span class="fu">c</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Burned_Area"</span>       <span class="ot">=</span> <span class="fl">0.75</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cleared_Area"</span>      <span class="ot">=</span> <span class="fl">0.70</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Forest"</span>            <span class="ot">=</span> <span class="fl">0.75</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Highly_Degraded"</span>   <span class="ot">=</span> <span class="fl">0.70</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wetland"</span>           <span class="ot">=</span> <span class="fl">0.70</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">alloc_options         =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">100</span>),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std_err               =</span> <span class="fl">0.01</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rare_class_prop       =</span> <span class="fl">0.1</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># show sampling desing</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>ro_sampling_design</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                prop       expected_ua std_dev equal alloc_120 alloc_100
+Burned_Area     0.01001252 0.75        0.433   408   120       100      
+Cleared_Area    0.3680405  0.7         0.458   408   702       717      
+Forest          0.2445099  0.75        0.433   408   466       477      
+Highly_Degraded 0.04600642 0.7         0.458   408   120       100      
+Wetland         0.3314307  0.7         0.458   408   632       646      
+                alloc_prop
+Burned_Area     20        
+Cleared_Area    751       
+Forest          499       
+Highly_Degraded 94        
+Wetland         676       </code></pre>
+</div>
+</div>
+</section>
+<section id="split-traintest-data" class="level2">
+<h2 class="anchored" data-anchor-id="split-traintest-data">Split train/test data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ro_samples_sf <span class="ot">&lt;-</span> <span class="fu">sits_stratified_sampling</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cube                  =</span> s2_cube_label_v2,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampling_design       =</span> ro_sampling_design,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alloc                 =</span> <span class="st">"alloc_120"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores            =</span> <span class="dv">4</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">shp_file              =</span> <span class="st">"./samples/ro_samples.shp"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%
+Deleting layer `ro_samples' using driver `ESRI Shapefile'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.shp' using driver `ESRI Shapefile'
+Writing 2450 features with 1 fields and geometry type Point.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(ro_samples_sf,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"./samples/ro_samples.csv"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer_options =</span> <span class="st">"GEOMETRY=AS_XY"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">append =</span> <span class="cn">FALSE</span> <span class="co"># TRUE if editing existing sample</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Deleting layer `ro_samples' using driver `CSV'
+Writing layer `ro_samples' to data source 
+  `./samples/ro_samples.csv' using driver `CSV'
+options:        GEOMETRY=AS_XY 
+Updating existing layer ro_samples
+Writing 2450 features with 1 fields and geometry type Point.</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate accuracy according to Olofsson's method</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>area_acc <span class="ot">&lt;-</span> <span class="fu">sits_accuracy</span>(s2_cube_label_v2,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation =</span> ro_samples_sf,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">multicores =</span> <span class="dv">4</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the area estimated accuracy</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>area_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area Weighted Statistics
+Overall Accuracy = 1
+
+Area-Weighted Users and Producers Accuracy
+                User Producer
+Burned_Area        1        1
+Cleared_Area       1        1
+Forest             1        1
+Highly_Degraded    1        1
+Wetland            1        1
+
+Mapped Area x Estimated Area (ha)
+                Mapped Area (ha) Error-Adjusted Area (ha) Conf Interval (ha)
+Burned_Area               993.51                   993.51                  0
+Cleared_Area            36519.48                 36519.48                  0
+Forest                  24261.93                 24261.93                  0
+Highly_Degraded          4565.07                  4565.07                  0
+Wetland                 32886.81                 32886.81                  0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the confusion matrix</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>area_acc<span class="sc">$</span>error_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 
+                  Burned_Area Cleared_Area Forest Highly_Degraded Wetland
+  Burned_Area             144            0      0               0       0
+  Cleared_Area              0          843      0               0       0
+  Forest                    0            0    560               0       0
+  Highly_Degraded           0            0      0             144       0
+  Wetland                   0            0      0               0     759</code></pre>
+</div>
+</div>
+</section>
+<section id="times-series-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="times-series-visualization">Times series visualization</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">as.data.frame</span>(ro_samples_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    label                    geometry   
+ Length:2450        POINT        :2450  
+ Class :character   epsg:4326    :   0  
+ Mode  :character   +proj=long...:   0  </code></pre>
+</div>
+</div>
+</section>
+<section id="deforestation-binary-map" class="level2">
+<h2 class="anchored" data-anchor-id="deforestation-binary-map">Deforestation binary map</h2>
+</section>
+<section id="deforestation-risk-map" class="level2">
+<h2 class="anchored" data-anchor-id="deforestation-risk-map">Deforestation risk map</h2>
+</section>
+</section>
+<section id="workflow-in-python---gee" class="level1">
+<h1>2. Workflow in Python -&gt; <code>GEE</code></h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set your Python ENV</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="st">"RETICULATE_PYTHON"</span> <span class="ot">=</span> <span class="st">"/usr/bin/python3"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Google Cloud SDK </span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="st">"EARTHENGINE_GCLOUD"</span> <span class="ot">=</span> <span class="st">"~/seamus/google-cloud-sdk/bin/"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgee) </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ee_Authenticate</span>()</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ee_install_upgrade</span>()</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ee_Initialize</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="housekeeping" class="level4">
+<h4 class="anchored" data-anchor-id="housekeeping">Housekeeping</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert markdown to script.R </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">"VT0007-deforestation-risk-map.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in file(con, "r"): cannot open the connection</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display environment setup</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.4.2 (2024-10-31)
+ os       macOS Sequoia 15.1.1
+ system   aarch64, darwin20
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       America/Vancouver
+ date     2024-12-03
+ pandoc   3.5 @ /usr/local/bin/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package            * version    date (UTC) lib source
+ abind              * 1.4-8      2024-09-12 [1] CRAN (R 4.4.1)
+ animation          * 2.7        2021-10-07 [1] CRAN (R 4.4.0)
+ ape                  5.8        2024-04-11 [1] CRAN (R 4.4.0)
+ assertthat           0.2.1      2019-03-21 [1] CRAN (R 4.4.0)
+ backports            1.5.0      2024-05-23 [1] CRAN (R 4.4.0)
+ base64enc            0.1-3      2015-07-28 [1] CRAN (R 4.4.0)
+ BIOMASS            * 2.1.11     2023-09-29 [1] CRAN (R 4.4.0)
+ bit                  4.5.0      2024-09-20 [1] CRAN (R 4.4.1)
+ bit64                4.5.2      2024-09-22 [1] CRAN (R 4.4.1)
+ bitops               1.0-9      2024-10-03 [1] CRAN (R 4.4.1)
+ boot                 1.3-31     2024-08-28 [1] CRAN (R 4.4.2)
+ brio                 1.1.5      2024-04-24 [1] CRAN (R 4.4.0)
+ cachem               1.1.0      2024-05-16 [1] CRAN (R 4.4.0)
+ callr                3.7.6      2024-03-25 [1] CRAN (R 4.4.0)
+ caret              * 6.0-94     2023-03-21 [1] CRAN (R 4.4.0)
+ class                7.3-22     2023-05-03 [1] CRAN (R 4.4.2)
+ classInt             0.4-10     2023-09-05 [1] CRAN (R 4.4.0)
+ cli                * 3.6.3      2024-06-21 [1] CRAN (R 4.4.0)
+ clue                 0.3-66     2024-11-13 [1] CRAN (R 4.4.1)
+ cluster              2.1.6      2023-12-01 [1] CRAN (R 4.4.2)
+ coda                 0.19-4.1   2024-01-31 [1] CRAN (R 4.4.0)
+ codetools            0.2-20     2024-03-31 [1] CRAN (R 4.4.2)
+ colorspace           2.1-1      2024-07-26 [1] CRAN (R 4.4.0)
+ cols4all           * 0.8        2024-10-16 [1] CRAN (R 4.4.1)
+ contfrac             1.1-12     2018-05-17 [1] CRAN (R 4.4.0)
+ coro                 1.1.0      2024-11-05 [1] CRAN (R 4.4.1)
+ corpcor              1.6.10     2021-09-16 [1] CRAN (R 4.4.0)
+ covr               * 3.6.4      2023-11-09 [1] CRAN (R 4.4.0)
+ cowplot            * 1.1.3      2024-01-22 [1] CRAN (R 4.4.0)
+ crayon               1.5.3      2024-06-20 [1] CRAN (R 4.4.0)
+ crosstalk            1.2.1      2023-11-23 [1] CRAN (R 4.4.0)
+ cubature             2.1.1      2024-07-14 [1] CRAN (R 4.4.0)
+ curl                 6.0.1      2024-11-14 [1] CRAN (R 4.4.1)
+ cyclocomp            1.1.1      2023-08-30 [1] CRAN (R 4.4.0)
+ data.table           1.16.2     2024-10-10 [1] CRAN (R 4.4.1)
+ DBI                  1.2.3      2024-06-02 [1] CRAN (R 4.4.0)
+ deldir               2.0-4      2024-02-28 [1] CRAN (R 4.4.0)
+ dendextend         * 1.19.0     2024-11-15 [1] CRAN (R 4.4.1)
+ desc                 1.4.3      2023-12-10 [1] CRAN (R 4.4.0)
+ deSolve              1.40       2023-11-27 [1] CRAN (R 4.4.0)
+ devtools             2.4.5      2022-10-11 [1] CRAN (R 4.4.0)
+ DiagrammeR         * 1.0.11     2024-02-02 [1] CRAN (R 4.4.0)
+ dichromat            2.0-0.1    2022-05-02 [1] CRAN (R 4.4.0)
+ digest             * 0.6.37     2024-08-19 [1] CRAN (R 4.4.1)
+ distances            0.1.11     2024-07-31 [1] CRAN (R 4.4.0)
+ dplyr              * 1.1.4      2023-11-17 [1] CRAN (R 4.4.0)
+ dtw                * 1.23-1     2022-09-19 [1] CRAN (R 4.4.0)
+ dtwclust           * 6.0.0      2024-07-23 [1] CRAN (R 4.4.0)
+ e1071              * 1.7-16     2024-09-16 [1] CRAN (R 4.4.1)
+ easypackages         0.1.0      2016-12-05 [1] CRAN (R 4.4.0)
+ ellipsis             0.3.2      2021-04-29 [1] CRAN (R 4.4.0)
+ elliptic             1.4-0      2019-03-14 [1] CRAN (R 4.4.0)
+ evaluate             1.0.1      2024-10-10 [1] CRAN (R 4.4.1)
+ exactextractr      * 0.10.0     2023-09-20 [1] CRAN (R 4.4.0)
+ extrafont          * 0.19       2023-01-18 [1] CRAN (R 4.4.0)
+ extrafontdb          1.0        2012-06-11 [1] CRAN (R 4.4.0)
+ fansi                1.0.6      2023-12-08 [1] CRAN (R 4.4.0)
+ fastmap              1.2.0      2024-05-15 [1] CRAN (R 4.4.0)
+ flexclust            1.4-2      2024-04-27 [1] CRAN (R 4.4.0)
+ FNN                * 1.1.4.1    2024-09-22 [1] CRAN (R 4.4.1)
+ forcats            * 1.0.0      2023-01-29 [1] CRAN (R 4.4.0)
+ foreach              1.5.2      2022-02-02 [1] CRAN (R 4.4.0)
+ fs                   1.6.5      2024-10-30 [1] CRAN (R 4.4.1)
+ future             * 1.34.0     2024-07-29 [1] CRAN (R 4.4.0)
+ future.apply         1.11.3     2024-10-27 [1] CRAN (R 4.4.1)
+ FuzzyNumbers         0.4-7      2021-11-15 [1] CRAN (R 4.4.0)
+ FuzzyNumbers.Ext.2   3.2        2017-09-05 [1] CRAN (R 4.4.0)
+ gargle               1.5.2      2023-07-20 [1] CRAN (R 4.4.0)
+ gdalcubes          * 0.7.0      2024-03-07 [1] CRAN (R 4.4.0)
+ gdalUtilities      * 1.2.5      2023-08-10 [1] CRAN (R 4.4.0)
+ generics             0.1.3      2022-07-05 [1] CRAN (R 4.4.0)
+ geojsonsf          * 2.0.3      2022-05-30 [1] CRAN (R 4.4.0)
+ ggplot2            * 3.5.1      2024-04-23 [1] CRAN (R 4.4.0)
+ ggrepel              0.9.6      2024-09-07 [1] CRAN (R 4.4.1)
+ globals              0.16.3     2024-03-08 [1] CRAN (R 4.4.0)
+ glue                 1.8.0      2024-09-30 [1] CRAN (R 4.4.1)
+ gmm                  1.8        2023-06-06 [1] CRAN (R 4.4.0)
+ googledrive        * 2.1.1      2023-06-11 [1] CRAN (R 4.4.0)
+ gower                1.0.1      2022-12-22 [1] CRAN (R 4.4.0)
+ gridExtra            2.3        2017-09-09 [1] CRAN (R 4.4.0)
+ gtable               0.3.6      2024-10-25 [1] CRAN (R 4.4.1)
+ hardhat              1.4.0      2024-06-02 [1] CRAN (R 4.4.0)
+ hdf5r              * 1.3.11     2024-07-07 [1] CRAN (R 4.4.0)
+ hexbin               1.28.5     2024-11-13 [1] CRAN (R 4.4.1)
+ hms                  1.1.3      2023-03-21 [1] CRAN (R 4.4.0)
+ htmltools          * 0.5.8.1    2024-04-04 [1] CRAN (R 4.4.0)
+ htmlwidgets          1.6.4      2023-12-06 [1] CRAN (R 4.4.0)
+ httpuv               1.6.15     2024-03-26 [1] CRAN (R 4.4.0)
+ httr               * 1.4.7      2023-08-15 [1] CRAN (R 4.4.0)
+ httr2              * 1.0.7      2024-11-26 [1] CRAN (R 4.4.1)
+ hypergeo             1.2-13     2016-04-07 [1] CRAN (R 4.4.0)
+ interp               1.1-6      2024-01-26 [1] CRAN (R 4.4.0)
+ ipred                0.9-15     2024-07-18 [1] CRAN (R 4.4.0)
+ iterators            1.0.14     2022-02-05 [1] CRAN (R 4.4.0)
+ jpeg                 0.1-10     2022-11-29 [1] CRAN (R 4.4.0)
+ jquerylib            0.1.4      2021-04-26 [1] CRAN (R 4.4.0)
+ jsonlite           * 1.8.9      2024-09-20 [1] CRAN (R 4.4.1)
+ kableExtra         * 1.4.0      2024-01-24 [1] CRAN (R 4.4.0)
+ KernSmooth           2.23-24    2024-05-17 [1] CRAN (R 4.4.2)
+ knitr              * 1.49       2024-11-08 [1] CRAN (R 4.4.1)
+ kohonen            * 3.0.12     2023-06-09 [1] CRAN (R 4.4.0)
+ later                1.4.1      2024-11-27 [1] CRAN (R 4.4.1)
+ lattice            * 0.22-6     2024-03-20 [1] CRAN (R 4.4.2)
+ latticeExtra         0.6-30     2022-07-04 [1] CRAN (R 4.4.0)
+ lava                 1.8.0      2024-03-05 [1] CRAN (R 4.4.0)
+ lazyeval             0.2.2      2019-03-15 [1] CRAN (R 4.4.0)
+ leafem             * 0.2.3      2023-09-17 [1] CRAN (R 4.4.0)
+ leaflet              2.2.2      2024-03-26 [1] CRAN (R 4.4.0)
+ leaflet.providers    2.0.0      2023-10-17 [1] CRAN (R 4.4.0)
+ leafsync             0.1.0      2019-03-05 [1] CRAN (R 4.4.0)
+ libgeos            * 3.11.1-2   2023-11-29 [1] CRAN (R 4.4.0)
+ lifecycle            1.0.4      2023-11-07 [1] CRAN (R 4.4.0)
+ lintr              * 3.1.2      2024-03-25 [1] CRAN (R 4.4.0)
+ listenv              0.9.1      2024-01-29 [1] CRAN (R 4.4.0)
+ lubridate          * 1.9.3      2023-09-27 [1] CRAN (R 4.4.0)
+ luz                * 0.4.0      2023-04-17 [1] CRAN (R 4.4.0)
+ lwgeom               0.2-14     2024-02-21 [1] CRAN (R 4.4.0)
+ magrittr             2.0.3      2022-03-30 [1] CRAN (R 4.4.0)
+ mapedit            * 0.6.0      2020-02-02 [1] CRAN (R 4.4.0)
+ maptiles           * 0.8.0      2024-10-22 [1] CRAN (R 4.4.1)
+ mapview            * 2.11.2     2023-10-13 [1] CRAN (R 4.4.0)
+ MASS                 7.3-61     2024-06-13 [1] CRAN (R 4.4.2)
+ Matrix               1.7-1      2024-10-18 [1] CRAN (R 4.4.2)
+ matrixcalc           1.0-6      2022-09-14 [1] CRAN (R 4.4.0)
+ MCMCglmm             2.36       2024-05-06 [1] CRAN (R 4.4.0)
+ memoise              2.0.1      2021-11-26 [1] CRAN (R 4.4.0)
+ mgcv               * 1.9-1      2023-12-21 [1] CRAN (R 4.4.2)
+ mime                 0.12       2021-09-28 [1] CRAN (R 4.4.0)
+ miniUI               0.1.1.1    2018-05-18 [1] CRAN (R 4.4.0)
+ minpack.lm           1.2-4      2023-09-11 [1] CRAN (R 4.4.0)
+ ModelMetrics         1.2.2.2    2020-03-17 [1] CRAN (R 4.4.0)
+ modeltools           0.2-23     2020-03-05 [1] CRAN (R 4.4.0)
+ MomTrunc             6.1        2024-10-28 [1] CRAN (R 4.4.1)
+ munsell              0.5.1      2024-04-01 [1] CRAN (R 4.4.0)
+ mvtnorm              1.3-2      2024-11-04 [1] CRAN (R 4.4.1)
+ ncdf4              * 1.23       2024-08-17 [1] CRAN (R 4.4.0)
+ nlme               * 3.1-166    2024-08-14 [1] CRAN (R 4.4.2)
+ nnet               * 7.3-19     2023-05-03 [1] CRAN (R 4.4.2)
+ openxlsx           * 4.2.7.1    2024-09-20 [1] CRAN (R 4.4.1)
+ palette            * 0.0.2      2024-03-15 [1] CRAN (R 4.4.0)
+ parallelly           1.39.0     2024-11-07 [1] CRAN (R 4.4.1)
+ pillar               1.9.0      2023-03-22 [1] CRAN (R 4.4.0)
+ pkgbuild             1.4.5      2024-10-28 [1] CRAN (R 4.4.1)
+ pkgconfig            2.0.3      2019-09-22 [1] CRAN (R 4.4.0)
+ pkgload              1.4.0      2024-06-28 [1] CRAN (R 4.4.0)
+ plyr                 1.8.9      2023-10-02 [1] CRAN (R 4.4.0)
+ png                  0.1-8      2022-11-29 [1] CRAN (R 4.4.0)
+ prettyunits          1.2.0      2023-09-24 [1] CRAN (R 4.4.0)
+ pROC                 1.18.5     2023-11-01 [1] CRAN (R 4.4.0)
+ processx             3.8.4      2024-03-16 [1] CRAN (R 4.4.0)
+ prodlim              2024.06.25 2024-06-24 [1] CRAN (R 4.4.0)
+ profvis              0.4.0      2024-09-20 [1] CRAN (R 4.4.1)
+ progress             1.2.3      2023-12-06 [1] CRAN (R 4.4.0)
+ promises             1.3.2      2024-11-28 [1] CRAN (R 4.4.1)
+ proxy              * 0.4-27     2022-06-09 [1] CRAN (R 4.4.0)
+ ps                   1.8.1      2024-10-28 [1] CRAN (R 4.4.1)
+ purrr              * 1.0.2      2023-08-10 [1] CRAN (R 4.4.0)
+ R.cache              0.16.0     2022-07-21 [1] CRAN (R 4.4.0)
+ R.methodsS3          1.8.2      2022-06-13 [1] CRAN (R 4.4.0)
+ R.oo                 1.27.0     2024-11-01 [1] CRAN (R 4.4.1)
+ R.utils              2.12.3     2023-11-18 [1] CRAN (R 4.4.0)
+ R6                   2.5.1      2021-08-19 [1] CRAN (R 4.4.0)
+ randomForest       * 4.7-1.2    2024-09-22 [1] CRAN (R 4.4.1)
+ rappdirs             0.3.3      2021-01-31 [1] CRAN (R 4.4.0)
+ raster             * 3.6-30     2024-10-02 [1] CRAN (R 4.4.1)
+ rasterVis          * 0.51.6     2023-11-01 [1] CRAN (R 4.4.0)
+ rbibutils            2.3        2024-10-04 [1] CRAN (R 4.4.1)
+ RColorBrewer       * 1.1-3      2022-04-03 [1] CRAN (R 4.4.0)
+ Rcpp               * 1.0.13-1   2024-11-02 [1] CRAN (R 4.4.1)
+ RcppArmadillo      * 14.2.0-1   2024-11-18 [1] CRAN (R 4.4.1)
+ RcppCensSpatial    * 0.3.0      2022-06-27 [1] CRAN (R 4.4.0)
+ RcppEigen          * 0.3.4.0.2  2024-08-24 [1] CRAN (R 4.4.1)
+ RcppParallel       * 5.1.9      2024-08-19 [1] CRAN (R 4.4.1)
+ RCurl                1.98-1.16  2024-07-11 [1] CRAN (R 4.4.0)
+ Rdpack               2.6.2      2024-11-15 [1] CRAN (R 4.4.1)
+ readr              * 2.1.5      2024-01-10 [1] CRAN (R 4.4.0)
+ recipes              1.1.0      2024-07-04 [1] CRAN (R 4.4.0)
+ relliptical          1.3.0      2024-02-07 [1] CRAN (R 4.4.0)
+ remotes              2.5.0      2024-03-17 [1] CRAN (R 4.4.0)
+ reshape2             1.4.4      2020-04-09 [1] CRAN (R 4.4.0)
+ reticulate         * 1.40.0     2024-11-15 [1] CRAN (R 4.4.1)
+ rex                  1.2.1      2021-11-26 [1] CRAN (R 4.4.0)
+ rgee               * 1.1.7      2024-11-30 [1] Github (r-spatial/rgee@bca9655)
+ rgeeExtra          * 0.1.0      2024-11-30 [1] Github (r-earthengine/rgeeExtra@7ea67d0)
+ rlang                1.1.4      2024-06-04 [1] CRAN (R 4.4.0)
+ rmarkdown            2.29       2024-11-04 [1] CRAN (R 4.4.1)
+ rpart                4.1.23     2023-12-05 [1] CRAN (R 4.4.2)
+ rsconnect          * 1.3.3      2024-11-19 [1] CRAN (R 4.4.1)
+ RSpectra             0.16-2     2024-07-18 [1] CRAN (R 4.4.0)
+ rstac                1.0.1      2024-07-18 [1] CRAN (R 4.4.0)
+ RStoolbox          * 1.0.0      2024-04-25 [1] CRAN (R 4.4.0)
+ rstudioapi           0.17.1     2024-10-22 [1] CRAN (R 4.4.1)
+ rts                * 1.1-14     2023-10-01 [1] CRAN (R 4.4.0)
+ Rttf2pt1             1.3.12     2023-01-22 [1] CRAN (R 4.4.0)
+ Ryacas0              0.4.4      2023-01-12 [1] CRAN (R 4.4.0)
+ s2                   1.1.7      2024-07-17 [1] CRAN (R 4.4.0)
+ sandwich             3.1-1      2024-09-15 [1] CRAN (R 4.4.1)
+ satellite            1.0.5      2024-02-10 [1] CRAN (R 4.4.0)
+ scales             * 1.3.0      2023-11-28 [1] CRAN (R 4.4.0)
+ sessioninfo          1.2.2      2021-12-06 [1] CRAN (R 4.4.0)
+ settings             0.2.7      2021-05-07 [1] CRAN (R 4.4.0)
+ sf                 * 1.0-19     2024-11-05 [1] CRAN (R 4.4.1)
+ shiny                1.9.1      2024-08-01 [1] CRAN (R 4.4.0)
+ shinyjs              2.1.0      2021-12-23 [1] CRAN (R 4.4.0)
+ sits               * 1.5.1      2024-08-19 [1] CRAN (R 4.4.1)
+ sitsdata           * 1.2        2024-11-30 [1] Github (e-sensing/sitsdata@222dda8)
+ slider               0.3.2      2024-10-25 [1] CRAN (R 4.4.1)
+ sp                 * 2.1-4      2024-04-30 [1] CRAN (R 4.4.0)
+ spacesXYZ            1.3-0      2024-01-23 [1] CRAN (R 4.4.0)
+ spData             * 2.3.3      2024-09-02 [1] CRAN (R 4.4.1)
+ spdep              * 1.3-7      2024-11-25 [1] CRAN (R 4.4.1)
+ stars              * 0.6-7      2024-11-07 [1] CRAN (R 4.4.1)
+ StempCens            1.1.0      2020-10-21 [1] CRAN (R 4.4.0)
+ stringi              1.8.4      2024-05-06 [1] CRAN (R 4.4.0)
+ stringr            * 1.5.1      2023-11-14 [1] CRAN (R 4.4.0)
+ styler             * 1.10.3     2024-04-07 [1] CRAN (R 4.4.0)
+ supercells         * 1.0.0      2024-02-11 [1] CRAN (R 4.4.0)
+ survival             3.7-0      2024-06-05 [1] CRAN (R 4.4.2)
+ svglite              2.1.3      2023-12-08 [1] CRAN (R 4.4.0)
+ systemfonts          1.1.0      2024-05-15 [1] CRAN (R 4.4.0)
+ tensorA              0.36.2.1   2023-12-13 [1] CRAN (R 4.4.0)
+ terra              * 1.7-78     2024-05-22 [1] CRAN (R 4.4.0)
+ testthat           * 3.2.1.1    2024-04-14 [1] CRAN (R 4.4.0)
+ tibble             * 3.2.1      2023-03-20 [1] CRAN (R 4.4.0)
+ tidyr              * 1.3.1      2024-01-24 [1] CRAN (R 4.4.0)
+ tidyselect           1.2.1      2024-03-11 [1] CRAN (R 4.4.0)
+ tidyverse          * 2.0.0      2023-02-22 [1] CRAN (R 4.4.0)
+ timechange           0.3.0      2024-01-18 [1] CRAN (R 4.4.0)
+ timeDate             4041.110   2024-09-22 [1] CRAN (R 4.4.1)
+ tinytex            * 0.54       2024-11-01 [1] CRAN (R 4.4.1)
+ tlrmvnmvt            1.1.2      2022-06-09 [1] CRAN (R 4.4.0)
+ tmap               * 3.3-4      2023-09-12 [1] CRAN (R 4.4.0)
+ tmaptools          * 3.1-1      2021-01-19 [1] CRAN (R 4.4.0)
+ tmvtnorm             1.6        2023-12-05 [1] CRAN (R 4.4.0)
+ torch                0.13.0     2024-05-21 [1] CRAN (R 4.4.0)
+ tzdb                 0.4.0      2023-05-12 [1] CRAN (R 4.4.0)
+ units                0.8-5      2023-11-28 [1] CRAN (R 4.4.0)
+ urlchecker           1.0.1      2021-11-30 [1] CRAN (R 4.4.0)
+ usethis              3.1.0      2024-11-26 [1] CRAN (R 4.4.1)
+ utf8                 1.2.4      2023-10-22 [1] CRAN (R 4.4.0)
+ vctrs                0.6.5      2023-12-01 [1] CRAN (R 4.4.0)
+ viridis              0.6.5      2024-01-29 [1] CRAN (R 4.4.0)
+ viridisLite          0.4.2      2023-05-02 [1] CRAN (R 4.4.0)
+ visNetwork           2.1.2      2022-09-29 [1] CRAN (R 4.4.0)
+ warp                 0.2.1      2023-11-02 [1] CRAN (R 4.4.0)
+ withr                3.0.2      2024-10-28 [1] CRAN (R 4.4.1)
+ wk                   0.9.4      2024-10-11 [1] CRAN (R 4.4.1)
+ xfun                 0.49       2024-10-31 [1] CRAN (R 4.4.1)
+ xgboost            * 1.7.8.1    2024-07-24 [1] CRAN (R 4.4.0)
+ XML                  3.99-0.17  2024-06-25 [1] CRAN (R 4.4.0)
+ xml2                 1.3.6      2023-12-04 [1] CRAN (R 4.4.0)
+ xtable               1.8-4      2019-04-21 [1] CRAN (R 4.4.0)
+ xts                * 0.14.1     2024-10-15 [1] CRAN (R 4.4.1)
+ yaml                 2.3.10     2024-07-26 [1] CRAN (R 4.4.0)
+ zeallot              0.1.0      2018-01-28 [1] CRAN (R 4.4.0)
+ zip                  2.3.1      2024-01-27 [1] CRAN (R 4.4.0)
+ zoo                * 1.8-12     2023-04-13 [1] CRAN (R 4.4.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-camaraUncertaintyActiveLearning" class="csl-entry" role="listitem">
+Camara, Gilberto, Rolf Simoes, Felipe Souza, Felipe Menino, Charlotte Pelletier, Pedro R. Andrade, Karine Ferreira, and Gilberto Queiroz. n.d. <em>Uncertainty and Active Learning | Sits: Satellite Image Time Series Analysis on Earth Observation Data Cubes</em>. <a href="https://e-sensing.github.io/sitsbook/uncertainty-and-active-learning.html#uncertainty-and-active-learning">https://e-sensing.github.io/sitsbook/uncertainty-and-active-learning.html#uncertainty-and-active-learning</a>.
+</div>
+<div id="ref-cochran1977sampling" class="csl-entry" role="listitem">
+Cochran, William G. 1977. <span>“Sampling Techniques.”</span> <em>Johan Wiley &amp; Sons Inc</em>.
+</div>
+<div id="ref-stanimirovaGlobalLandCover2023" class="csl-entry" role="listitem">
+Stanimirova, Radost, Katelyn Tarrio, Konrad Turlej, Kristina McAvoy, Sophia Stonebrook, Kai-Ting Hu, Paulo Arévalo, et al. 2023. <span>“A Global Land Cover Training Dataset from 1984 to 2020.”</span> <em>Scientific Data</em> 10 (1): 879. <a href="https://doi.org/10.1038/s41597-023-02798-5">https://doi.org/10.1038/s41597-023-02798-5</a>.
+</div>
+<div id="ref-verraVT0007UnplannedDeforestation2021" class="csl-entry" role="listitem">
+Verra. 2021. <span>“VT0007 Unplanned Deforestation Allocation Tool.”</span>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

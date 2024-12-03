@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "VT0007: Starter Template"
+  title: "VT0007"
   navbar:
     left:
       - href: VT0007-deforestation-map.qmd

@@ -1,5 +1,5 @@
 ---
-title: "Jurisdictional Allocation & Deforestation Risk Maps"
+title: "VT0007 Jurisdictional Deforestation Risk Maps"
 date: 2024-11-04
 author: 
   - name: Seamus Murphy
@@ -39,6 +39,8 @@ bibliography: references.bib
 
 
 
+
+
 ## Summary
 
 Two workflow approaches are detailed below following similar steps to those outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows are derived using same sources of training sample dataset [@stanimirovaGlobalLandCover2023] and collection of STAC-formatted analysis-ready-data of Landsat imagery.
@@ -59,6 +61,8 @@ Raster normalization is implemented with `sits_regularize` functions to apply a 
 
 
 
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -73,12 +77,11 @@ s2_cube_ro <- sits_cube(
   progress = FALSE)
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-
-  |                                                                            
-  |======================================================================| 100%
+Error: .check_stac_items: NULL value not allowed for items - collection search returned no items
+ check 'roi', 'start_date', 'end_date', and 'tile' parameters
 ```
 
 
@@ -101,12 +104,25 @@ s2_reg_cube_ro <- sits_regularize(
   multicores = 4,
   progress = FALSE)
 ```
+
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_ro' not found
+```
+
+
+:::
 :::
 
 
 
 
+
+
 ## Review data cube
+
+
 
 
 
@@ -122,8 +138,13 @@ plot(s2_reg_cube_ro,
   )
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-1.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_reg_cube_ro' not found
+```
+
+
 :::
 
 ```{.r .cell-code}
@@ -135,8 +156,13 @@ plot(s2_reg_cube_ro,
   )
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-2.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_reg_cube_ro' not found
+```
+
+
 :::
 
 ```{.r .cell-code}
@@ -148,10 +174,17 @@ plot(s2_reg_cube_ro,
      )
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-2-3.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_reg_cube_ro' not found
+```
+
+
 :::
 :::
+
+
 
 
 
@@ -160,6 +193,8 @@ plot(s2_reg_cube_ro,
 
 We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (`Burned_Area`, `Forest`, `Highly_Degraded`, and `Cleared_Area`).
 Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.
+
+
 
 
 
@@ -190,7 +225,18 @@ s2_cube_probs <- sits_classify(
   memsize = 15,
   multicores = 5
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_reg_cube_ro' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Post-process the probability cube
 s2_cube_bayes <- sits_smooth(
   cube = s2_cube_probs,
@@ -198,7 +244,18 @@ s2_cube_bayes <- sits_smooth(
   memsize = 16,
   multicores = 4
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: .check_raster_cube_files: Invalid data cube - missing files
+```
+
+
+:::
+
+```{.r .cell-code}
 # Label the post-processed  probability cube
 s2_cube_label <- sits_label_classification(
   cube = s2_cube_bayes,
@@ -206,14 +263,32 @@ s2_cube_label <- sits_label_classification(
   memsize = 16,
   multicores = 4
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_bayes' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 plot(s2_cube_label)
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-3-1.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_cube_label' not found
+```
+
+
 :::
 :::
+
+
 
 
 
@@ -222,6 +297,8 @@ plot(s2_cube_label)
 
 To improve model performance, we estimate class uncertainty and plot these pixel error metrics.
 Results below reveal highest uncertainty levels in classification of wetland and water areas.
+
+
 
 
 
@@ -237,14 +314,32 @@ s2_cube_uncert <- sits_uncertainty(
   memsize = 16,
   multicores = 4
 )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_bayes' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 plot(s2_cube_uncert)
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-4-1.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_cube_uncert' not found
+```
+
+
 :::
 :::
+
+
 
 
 
@@ -252,6 +347,8 @@ plot(s2_cube_uncert)
 As expected, the places of highest uncertainty are those covered by surface water or associated with wetlands.
 These places are likely to be misclassified.
 For this reason, sits provides `sits_uncertainty_sampling()`, which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty [@camaraUncertaintyActiveLearning].
+
+
 
 
 
@@ -266,15 +363,33 @@ new_samples <- sits_uncertainty_sampling(
   min_uncert = 0.5,
   sampling_window = 10
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_uncert' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # View the location of the samples
 sits_view(new_samples)
 ```
 
-::: {.cell-output-display}
-preserve85ca887ffa1fe88f
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 'new_samples' not found
+```
+
+
 :::
 :::
+
+
 
 
 
@@ -287,30 +402,76 @@ Once we identify their feature classes and relabel them correctly, we append the
 
 
 
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
 # Label the new samples
 new_samples$label <- "Wetland"
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 'new_samples' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Obtain the time series from the regularized cube
 new_samples_ts <- sits_get_data(
   cube = s2_reg_cube_ro,
   samples = new_samples
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_reg_cube_ro' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Add new class to original samples
 samples_round_2 <- dplyr::bind_rows(
   samples_4classes_3bands,
   new_samples_ts
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 'new_samples_ts' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Train a RF model with the new sample set
 rfor_model_v2 <- sits_train(
   samples = samples_round_2,
   ml_method = sits_rfor()
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 'samples_round_2' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Classify the small area cube
 s2_cube_probs_v2 <- sits_classify(
   data = s2_reg_cube_ro,
@@ -320,7 +481,18 @@ s2_cube_probs_v2 <- sits_classify(
   memsize = 16,
   multicores = 4
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_reg_cube_ro' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Post-process the probability cube
 s2_cube_bayes_v2 <- sits_smooth(
   cube = s2_cube_probs_v2,
@@ -329,7 +501,18 @@ s2_cube_bayes_v2 <- sits_smooth(
   memsize = 16,
   multicores = 4
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: .check_raster_cube_files: Invalid data cube - missing files
+```
+
+
+:::
+
+```{.r .cell-code}
 # Label the post-processed  probability cube
 s2_cube_label_v2 <- sits_label_classification(
   cube = s2_cube_bayes_v2,
@@ -338,20 +521,40 @@ s2_cube_label_v2 <- sits_label_classification(
   memsize = 16,
   multicores = 4
   )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_bayes_v2' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Plot the second version of the classified cube
 plot(s2_cube_label_v2)
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-6-1.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_cube_label_v2' not found
+```
+
+
 :::
 :::
+
+
 
 
 
 
 ## Remap uncertainty
+
+
 
 
 
@@ -368,14 +571,32 @@ s2_cube_uncert_v2 <- sits_uncertainty(
   memsize = 16,
   multicores = 4
 )
+```
 
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_bayes_v2' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 plot(s2_cube_uncert_v2)
 ```
 
-::: {.cell-output-display}
-![](VT0007-deforestation-map_files/figure-html/unnamed-chunk-7-1.png){width=672}
+::: {.cell-output .cell-output-error}
+
+```
+Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 's2_cube_uncert_v2' not found
+```
+
+
 :::
 :::
+
+
 
 
 
@@ -385,6 +606,8 @@ plot(s2_cube_uncert_v2)
 To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling].
 The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum.
 Alternatively, ad-hoc parameterization is suggested as follows.
+
+
 
 
 
@@ -405,35 +628,40 @@ ro_sampling_design <- sits_sampling_design(
   std_err               = 0.01,
   rare_class_prop       = 0.1
 )
+```
+
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_label_v2' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # show sampling desing
 ro_sampling_design
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-                prop       expected_ua std_dev equal alloc_120 alloc_100
-Burned_Area     0.01001252 0.75        0.433   408   120       100      
-Cleared_Area    0.3680405  0.7         0.458   408   702       717      
-Forest          0.2445099  0.75        0.433   408   466       477      
-Highly_Degraded 0.04600642 0.7         0.458   408   120       100      
-Wetland         0.3314307  0.7         0.458   408   632       646      
-                alloc_prop
-Burned_Area     20        
-Cleared_Area    751       
-Forest          499       
-Highly_Degraded 94        
-Wetland         676       
+Error: object 'ro_sampling_design' not found
 ```
 
 
 :::
 :::
+
+
 
 
 
 
 ## Split train/test data
+
+
 
 
 
@@ -450,18 +678,10 @@ ro_samples_sf <- sits_stratified_sampling(
 )
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |======================================================================| 100%
-Deleting layer `ro_samples' using driver `ESRI Shapefile'
-Writing layer `ro_samples' to data source 
-  `./samples/ro_samples.shp' using driver `ESRI Shapefile'
-Writing 2450 features with 1 fields and geometry type Point.
+Error: .check_raster_cube_files: Invalid data cube - missing files
 ```
 
 
@@ -475,25 +695,24 @@ sf::st_write(ro_samples_sf,
 )
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-Deleting layer `ro_samples' using driver `CSV'
-Writing layer `ro_samples' to data source 
-  `./samples/ro_samples.csv' using driver `CSV'
-options:        GEOMETRY=AS_XY 
-Updating existing layer ro_samples
-Writing 2450 features with 1 fields and geometry type Point.
+Error: object 'ro_samples_sf' not found
 ```
 
 
 :::
 :::
+
+
 
 
 
 
 ## Confusion matrix
+
+
 
 
 
@@ -506,31 +725,26 @@ area_acc <- sits_accuracy(s2_cube_label_v2,
   validation = ro_samples_sf,
   multicores = 4
 )
+```
+
+::: {.cell-output .cell-output-error}
+
+```
+Error: object 's2_cube_label_v2' not found
+```
+
+
+:::
+
+```{.r .cell-code}
 # Print the area estimated accuracy
 area_acc
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-Area Weighted Statistics
-Overall Accuracy = 1
-
-Area-Weighted Users and Producers Accuracy
-                User Producer
-Burned_Area        1        1
-Cleared_Area       1        1
-Forest             1        1
-Highly_Degraded    1        1
-Wetland            1        1
-
-Mapped Area x Estimated Area (ha)
-                Mapped Area (ha) Error-Adjusted Area (ha) Conf Interval (ha)
-Burned_Area               993.51                   993.51                  0
-Cleared_Area            36519.48                 36519.48                  0
-Forest                  24261.93                 24261.93                  0
-Highly_Degraded          4565.07                  4565.07                  0
-Wetland                 32886.81                 32886.81                  0
+Error: object 'area_acc' not found
 ```
 
 
@@ -541,26 +755,24 @@ Wetland                 32886.81                 32886.81                  0
 area_acc$error_matrix
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-                 
-                  Burned_Area Cleared_Area Forest Highly_Degraded Wetland
-  Burned_Area             144            0      0               0       0
-  Cleared_Area              0          843      0               0       0
-  Forest                    0            0    560               0       0
-  Highly_Degraded           0            0      0             144       0
-  Wetland                   0            0      0               0     759
+Error: object 'area_acc' not found
 ```
 
 
 :::
 :::
+
+
 
 
 
 
 ## Times series visualization
+
+
 
 
 
@@ -571,18 +783,17 @@ area_acc$error_matrix
 summary(as.data.frame(ro_samples_sf))
 ```
 
-::: {.cell-output .cell-output-stdout}
+::: {.cell-output .cell-output-error}
 
 ```
-    label                    geometry   
- Length:2450        POINT        :2450  
- Class :character   epsg:4326    :   0  
- Mode  :character   +proj=long...:   0  
+Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'ro_samples_sf' not found
 ```
 
 
 :::
 :::
+
+
 
 
 
@@ -592,6 +803,8 @@ summary(as.data.frame(ro_samples_sf))
 ## Deforestation risk map
 
 # 2. Workflow in Python -\> `GEE`
+
+
 
 
 
@@ -614,7 +827,11 @@ ee_Initialize()
 
 
 
+
+
 #### Housekeeping
+
+
 
 
 
@@ -753,7 +970,6 @@ devtools::session_info()
  ipred                0.9-15     2024-07-18 [1] CRAN (R 4.4.0)
  iterators            1.0.14     2022-02-05 [1] CRAN (R 4.4.0)
  jpeg                 0.1-10     2022-11-29 [1] CRAN (R 4.4.0)
- jquerylib            0.1.4      2021-04-26 [1] CRAN (R 4.4.0)
  jsonlite           * 1.8.9      2024-09-20 [1] CRAN (R 4.4.1)
  kableExtra         * 1.4.0      2024-01-24 [1] CRAN (R 4.4.0)
  KernSmooth           2.23-24    2024-05-17 [1] CRAN (R 4.4.2)
@@ -766,7 +982,6 @@ devtools::session_info()
  lazyeval             0.2.2      2019-03-15 [1] CRAN (R 4.4.0)
  leafem             * 0.2.3      2023-09-17 [1] CRAN (R 4.4.0)
  leaflet              2.2.2      2024-03-26 [1] CRAN (R 4.4.0)
- leaflet.providers    2.0.0      2023-10-17 [1] CRAN (R 4.4.0)
  leafsync             0.1.0      2019-03-05 [1] CRAN (R 4.4.0)
  libgeos            * 3.11.1-2   2023-11-29 [1] CRAN (R 4.4.0)
  lifecycle            1.0.4      2023-11-07 [1] CRAN (R 4.4.0)
@@ -864,7 +1079,6 @@ devtools::session_info()
  shinyjs              2.1.0      2021-12-23 [1] CRAN (R 4.4.0)
  sits               * 1.5.1      2024-08-19 [1] CRAN (R 4.4.1)
  sitsdata           * 1.2        2024-11-30 [1] Github (e-sensing/sitsdata@222dda8)
- slider               0.3.2      2024-10-25 [1] CRAN (R 4.4.1)
  sp                 * 2.1-4      2024-04-30 [1] CRAN (R 4.4.0)
  spacesXYZ            1.3-0      2024-01-23 [1] CRAN (R 4.4.0)
  spData             * 2.3.3      2024-09-02 [1] CRAN (R 4.4.1)
@@ -902,7 +1116,6 @@ devtools::session_info()
  viridis              0.6.5      2024-01-29 [1] CRAN (R 4.4.0)
  viridisLite          0.4.2      2023-05-02 [1] CRAN (R 4.4.0)
  visNetwork           2.1.2      2022-09-29 [1] CRAN (R 4.4.0)
- warp                 0.2.1      2023-11-02 [1] CRAN (R 4.4.0)
  withr                3.0.2      2024-10-28 [1] CRAN (R 4.4.1)
  wk                   0.9.4      2024-10-11 [1] CRAN (R 4.4.1)
  xfun                 0.49       2024-10-31 [1] CRAN (R 4.4.1)

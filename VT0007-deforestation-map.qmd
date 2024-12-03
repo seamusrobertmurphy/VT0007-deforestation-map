@@ -62,6 +62,7 @@ easypackages::packages(
   "gdalcubes", 
   "gdalUtilities", 
   "geojsonsf",
+  "giscoR",
   "googledrive",
   "hdf5r", 
   "htmltools",
@@ -139,7 +140,8 @@ sf::sf_use_s2(use_s2 = FALSE)
 
 ## Summary
 
-Two workflow approaches are detailed below following similar steps to those outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows are derived using same sources of training sample dataset [@stanimirovaGlobalLandCover2023] and collection of STAC-formatted analysis-ready-data of Landsat imagery.
+Two workflow approaches are detailed below following similar steps to those outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021.
+For comparison purposes, both workflows are derived using same sources of training sample dataset [@stanimirovaGlobalLandCover2023] and STAC-formatted Landsat Collection-2 Level-2 [imagery](https://www.usgs.gov/landsat-missions/landsat-science-products).
 
 Workflow-1 is coded within the R ecosystem and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation.
 Workflow-2, which is coded using Python and Google Earth Engine functions, is recommended for larger areas of interest ( (***Java transcription pending, link here***).
@@ -148,75 +150,96 @@ Workflow-2, which is coded using Python and Google Earth Engine functions, is re
 
 # 1. Workflow in R -\> `sits`
 
-## Process data cube
+## 1.1 Testing phase
 
-For shawcasing purposes, we import a training dataset from the `sitsdata` package from a study of Brazil's Samuel Hydroelectric Dam in Rondonia State conducted between 2020-06-04 to 2021-08-26.
-To evaluate this training sample, we assemble below a data cube of Sentinel-2-L2A-COGS images from the AWS open bucket.
-Raster normalization is implemented with `sits_regularize` functions to apply a cloud masking and back-filling of missing pixels by cloudless ranking and global median values across 16-day intervals.
+### Assemble HRP time series
 
-```{r}
-# build irregular data cube from single sentinel tile
-s2_cube_ro <- sits_cube(
-  source = "AWS",
-  collection = "SENTINEL-S2-L2A-COGS",
-  tiles = "20LMR",
-  bands = c("B02", "B8A", "B11", "SCL"),
-  start_date = as.Date("2020-06-01"),
-  end_date = as.Date("2021-09-01"),
-  progress = FALSE)
-
-# select aoi inside the tile
-roi <- c(
-  lon_max = -63.25790, lon_min = -63.6078,
-  lat_max = -8.72290, lat_min = -8.95630)
-
-# regularize the aoi filtered cube
-s2_reg_cube_ro <- sits_regularize(
-  cube = s2_cube_ro,
-  output_dir = "./cubes/01_reg",
-  res = 30,
-  roi = roi,
-  period = "P16D",
-  memsize = 16,
-  multicores = 4,
-  progress = FALSE)
-```
-
-## Review data cube
+We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname.
+Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
 
 ```{r}
 #| layout-ncol: 3
+#| eval: false
 
-plot(s2_reg_cube_ro,
-  red = "B11",
-  green = "B8A",
-  blue = "B02",
-  date = "2020-07-04"
+# derive aoi & master crs
+crs_master  = sf::st_crs("epsg:4326")
+aoi_country = giscoR::gisco_get_countries(country = "Suriname", resolution = "3") |>
+  sf::st_cast() |> sf::st_transform(crs_master)
+
+# cloud-assemble data cube
+cube_raw = sits::sits_cube(
+  source      = "MPC",
+  collection  = "LANDSAT-C2-L2",
+  bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
+  roi         = aoi_country,
+  start_date  = as.Date("2013-01-01"),
+  end_date    = as.Date("2023-01-01"),
+  output_dir  = here::here("cubes", "01-raw"),
+  progress    = T
   )
 
-plot(s2_reg_cube_ro,
-  red = "B11",
-  green = "B8A",
-  blue = "B02",
-  date = "2020-11-09"
+# optional: localize cube for faster processing
+cube_local = sits::sits_cube_copy(
+  cube        = cube_raw,
+  roi         = aoi_country,
+  output_dir  = here::here("cubes", "01-raw"),
+  multicores  = 8,
+  res         = 30
   )
 
-plot(s2_reg_cube_ro, 
-     red = "B11", 
-     green = "B8A", 
-     blue = "B02", 
-     date = "2021-08-08"
-     )
+# regularize data cube
+cube_reg = sits::sits_regularize(
+  cube        = cube_local,
+  roi         = aoi_country,
+  res         = 30,
+  period      = "P5Y",
+  output_dir  = here::here("cubes", "02-reg"),,
+  memsize     = 16,
+  multicores  = 4,
+  progress    = T
+  )
+
+# review cube timeline
+sits::sits_timeline(cube_reg)
+
+# plot cube timeline
+plot(cube_reg,
+  red         = "RED",
+  green       = "GREEN",
+  blue        = "BLUE",
+  date        = "2013-01-01"
+  )
+
+plot(cube_reg,
+  red         = "RED",
+  green       = "GREEN",
+  blue        = "BLUE",
+  date        = "2018-01-01"
+  )
+
+plot(cube_reg,
+  red         = "RED",
+  green       = "GREEN",
+  blue        = "BLUE",
+  date        = "2023-01-01"
+  )
 ```
 
-## Classify data cube
+### Classify HRP time series
 
-We import a training set of 480 times series points specifically designed to detect deforestation, which comprise of four classes (`Burned_Area`, `Forest`, `Highly_Degraded`, and `Cleared_Area`).
-Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing.
+We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]).
+Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix.
+The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
+
+![Figure 2: Land cover classes included in the GLanCE Level 1 classification scheme (Woodcock et al 2022)](training/glance_training_classes.png)
 
 ```{r}
-# Load the training set
-glance_training = "https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"
+# Extract training set from gee to drive & import: https://gee-community-catalog.org/projects/glance_training/?h=training 
+glance_training_url = "https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"
+# file_name = "glance_training.csv"
+# download.file(url = url, path = here::here("training"), destfile = file_name)
+glance_training = read.csv(here::here("training", "glance_training.csv"))
+
 data("samples_prodes_4classes")
 # Select the same three bands used in the data cube
 samples_4classes_3bands <- sits_select(

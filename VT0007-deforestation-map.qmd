@@ -178,34 +178,83 @@ We assemble and process a data cube representing a historical reference period (
 #| layout-ncol: 3
 #| eval: false
 
+# 2014 -------------------
 # cloud-assemble data cube
-cube_raw = sits::sits_cube(
+cube_raw_2014 = sits::sits_cube(
   source      = "MPC",
   collection  = "LANDSAT-C2-L2",
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
-  roi         = aoi_country,
+  roi         = aoi_target,
   start_date  = as.Date("2014-01-01"),
   end_date    = as.Date("2014-04-01"),
-  output_dir  = here::here("cubes", "01-raw"),
   progress    = T
   )
 
 # regularize data cube
-cube_reg = sits::sits_regularize(
-  cube        = cube_local,
-  roi         = aoi_country,
-  res         = 30,
-  period      = "P5Y",
-  output_dir  = here::here("cubes", "reg"),
+cube_reg_2014 = sits::sits_regularize(
+  cube        = cube_raw_2014,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P90D",
+  output_dir  = here::here("cubes", "reg", "2014"),
   memsize     = 16,
-  multicores  = 4,
+  multicores  = 8,
   progress    = T
   )
 
-# review cube timeline
-sits::sits_timeline(cube_reg)
+# 2019 -------------------
+# cloud-assemble data cube
+cube_raw_2019 = sits::sits_cube(
+  source      = "MPC",
+  collection  = "LANDSAT-C2-L2",
+  bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
+  roi         = aoi_target,
+  start_date  = as.Date("2019-01-01"),
+  end_date    = as.Date("2019-04-01"),
+  progress    = T
+  )
 
-# plot cube timeline
+# regularize data cube
+cube_reg_2019 = sits::sits_regularize(
+  cube        = cube_raw_2019,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P90D",
+  output_dir  = here::here("cubes", "reg", "2019"),
+  memsize     = 16,
+  multicores  = 8,
+  progress    = T
+  )
+
+# 2024 -------------------
+# cloud-assemble data cube
+cube_raw_2024 = sits::sits_cube(
+  source      = "MPC",
+  collection  = "LANDSAT-C2-L2",
+  bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
+  roi         = aoi_target,
+  start_date  = as.Date("2024-01-01"),
+  end_date    = as.Date("2024-04-01"),
+  progress    = T
+  )
+
+# regularize data cube
+cube_reg_2024 = sits::sits_regularize(
+  cube        = cube_raw_2024,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P90D",
+  output_dir  = here::here("cubes", "reg", "2024"),
+  memsize     = 16,
+  multicores  = 8,
+  progress    = T
+  )
+```
+
+
+```{r}
+#| eval: false
+# plot cube timelines
 plot(cube_reg,
   red         = "RED",
   green       = "GREEN",

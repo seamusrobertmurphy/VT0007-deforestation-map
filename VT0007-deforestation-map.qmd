@@ -36,6 +36,7 @@ bibliography: references.bib
 ```{r setup}
 #| warning: false
 #| message: false
+#| include: false
 #| error: false
 #| echo: false
 
@@ -60,6 +61,7 @@ easypackages::packages(
   "future",
   "gdalcubes", 
   "gdalUtilities", 
+  "geodata",
   "geojsonsf",
   "giscoR",
   "googledrive",
@@ -108,7 +110,6 @@ easypackages::packages(
   "stringr",
   "sits",
   "sitsdata",
-  "styler",
   "supercells", 
   "terra", 
   "testthat", 
@@ -116,7 +117,8 @@ easypackages::packages(
   "tinytex",
   "tmap", 
   "tmaptools",
-  "xgboost"
+  "xgboost",
+  prompt = F
   )
 
 knitr::opts_chunk$set(
@@ -124,26 +126,22 @@ knitr::opts_chunk$set(
   message     = FALSE, 
   warning     = FALSE, 
   error       = TRUE, 
-  comment     = NA, 
-  tidy.opts   = list(width.cutoff = 60)
-) 
+  comment     = NA
+  ) 
 
 base::options(
   htmltools.dir.version = FALSE, 
   htmltools.preserve.raw = FALSE)
 
 # switch on/off for spherical geometries
-#sf::sf_use_s2(use_s2 = TRUE)
 sf::sf_use_s2(use_s2 = FALSE)
 ```
 
 ## Summary
 
-Two workflow approaches are detailed below following similar steps to those outlined in Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021.
-For comparison purposes, both workflows are derived using same sources of training sample dataset [@stanimirovaGlobalLandCover2023] and STAC-formatted Landsat Collection-2 Level-2 [imagery](https://www.usgs.gov/landsat-missions/landsat-science-products).
+The following details two workflow approaches to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows use the same training sample [@stanimirovaGlobalLandCover2023] and STAC-formatted Landsat Collection-2 Level-2 [imagery](https://www.usgs.gov/landsat-missions/landsat-science-products).
 
-Workflow-1 is coded within the R ecosystem and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation.
-Workflow-2, which is coded using Python and Google Earth Engine functions, is recommended for larger areas of interest ( (***Java transcription pending, link here***).
+Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation. Workflow-2, which is coded in Python and Google Earth Engine functions, is recommended for larger areas of interest (***Update java link here***).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
@@ -151,19 +149,34 @@ Workflow-2, which is coded using Python and Google Earth Engine functions, is re
 
 ## 1.1 Testing phase
 
+### Jurisdictional boundaries
+
+```{r}
+# assign master crs
+crs_master  = sf::st_crs("epsg:4326")
+aoi_country = geodata::gadm(country="GUY", level=0, path=tempdir()) |>
+  sf::st_as_sf() |> sf::st_cast() |> sf::st_transform(crs_master)
+aoi_states = geodata::gadm(country="GUY", level=1, path=tempdir()) |>
+  sf::st_as_sf() |> sf::st_cast() |> sf::st_transform(crs_master) |>
+  dplyr::rename(State = NAME_1)
+aoi_target = dplyr::filter(aoi_states, State == "Barima-Waini")
+
+tmap::tmap_mode("view")
+tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
+  tmap::tm_text("State", col = "white", size = 1, alpha = 0.3, just = "bottom") +
+  tmap::tm_shape(aoi_country) + tmap::tm_borders(col = "white", lwd = 1) +
+  tmap::tm_shape(aoi_target) + tmap::tm_borders(col = "red", lwd = 2) +
+  tmap::tm_text("State", col = "red", size = 1.3) +
+  tmap::tm_basemap("Esri.WorldImagery")
+```
+
 ### Assemble HRP time series
 
-We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname.
-Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
+We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname. Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
 
 ```{r}
 #| layout-ncol: 3
 #| eval: false
-
-# derive aoi & master crs
-crs_master  = sf::st_crs("epsg:4326")
-aoi_country = giscoR::gisco_get_countries(country = "Suriname", resolution = "3") |>
-  sf::st_cast() |> sf::st_transform(crs_master)
 
 # cloud-assemble data cube
 cube_raw = sits::sits_cube(
@@ -171,19 +184,10 @@ cube_raw = sits::sits_cube(
   collection  = "LANDSAT-C2-L2",
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
   roi         = aoi_country,
-  start_date  = as.Date("2013-01-01"),
-  end_date    = as.Date("2023-01-01"),
+  start_date  = as.Date("2014-01-01"),
+  end_date    = as.Date("2014-04-01"),
   output_dir  = here::here("cubes", "01-raw"),
   progress    = T
-  )
-
-# optional: localize for faster processing
-cube_local = sits::sits_cube_copy(
-  cube        = cube_raw,
-  roi         = aoi_country,
-  output_dir  = here::here("cubes", "01-raw"),
-  multicores  = 8,
-  res         = 30
   )
 
 # regularize data cube
@@ -192,7 +196,7 @@ cube_reg = sits::sits_regularize(
   roi         = aoi_country,
   res         = 30,
   period      = "P5Y",
-  output_dir  = here::here("cubes", "02-reg"),,
+  output_dir  = here::here("cubes", "reg"),
   memsize     = 16,
   multicores  = 4,
   progress    = T
@@ -226,13 +230,13 @@ plot(cube_reg,
 
 ### Classify HRP time series
 
-We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]).
-Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix.
-The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
+We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix. The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
 
 ![Figure 2: Land cover classes included in the GLanCE Level 1 classification scheme (Woodcock et al 2022)](training/glance_training_classes.png)
 
 ```{r}
+#| eval: false
+
 # Extract training set from gee to drive & import: https://gee-community-catalog.org/projects/glance_training/?h=training 
 glance_training_url = "https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"
 # file_name = "glance_training.csv"
@@ -282,10 +286,10 @@ plot(s2_cube_label)
 
 ## Map uncertainty
 
-To improve model performance, we estimate class uncertainty and plot these pixel error metrics.
-Results below reveal highest uncertainty levels in classification of wetland and water areas.
+To improve model performance, we estimate class uncertainty and plot these pixel error metrics. Results below reveal highest uncertainty levels in classification of wetland and water areas.
 
 ```{r}
+#| eval: false
 # Calculate the uncertainty cube
 s2_cube_uncert <- sits_uncertainty(
   cube = s2_cube_bayes,
@@ -298,11 +302,11 @@ s2_cube_uncert <- sits_uncertainty(
 plot(s2_cube_uncert)
 ```
 
-As expected, the places of highest uncertainty are those covered by surface water or associated with wetlands.
-These places are likely to be misclassified.
-For this reason, sits provides `sits_uncertainty_sampling()`, which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty [@camaraUncertaintyActiveLearning].
+As expected, the places of highest uncertainty are those covered by surface water or associated with wetlands. These places are likely to be misclassified. For this reason, sits provides `sits_uncertainty_sampling()`, which takes the uncertainty cube as its input and produces a tibble with locations in WGS84 with high uncertainty [@camaraUncertaintyActiveLearning].
 
 ```{r}
+#| eval: false
+
 # Find samples with high uncertainty
 new_samples <- sits_uncertainty_sampling(
   uncert_cube = s2_cube_uncert,
@@ -317,10 +321,11 @@ sits_view(new_samples)
 
 ## Add training samples
 
-We can then use these points of high-uncertainty as new samples to add to our current training dataset.
-Once we identify their feature classes and relabel them correctly, we append them to derive an augmented `samples_round_2`.
+We can then use these points of high-uncertainty as new samples to add to our current training dataset. Once we identify their feature classes and relabel them correctly, we append them to derive an augmented `samples_round_2`.
 
 ```{r}
+#| eval: false
+
 # Label the new samples
 new_samples$label <- "Wetland"
 
@@ -377,6 +382,8 @@ plot(s2_cube_label_v2)
 ## Remap uncertainty
 
 ```{r}
+#| eval: false
+
 # Calculate the uncertainty cube
 s2_cube_uncert_v2 <- sits_uncertainty(
   cube = s2_cube_bayes_v2,
@@ -392,11 +399,11 @@ plot(s2_cube_uncert_v2)
 
 ## Accuracy assessment
 
-To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling].
-The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum.
-Alternatively, ad-hoc parameterization is suggested as follows.
+To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling]. The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum. Alternatively, ad-hoc parameterization is suggested as follows.
 
 ```{r}
+#| eval: false
+
 ro_sampling_design <- sits_sampling_design(
   cube = s2_cube_label_v2,
   expected_ua = c(
@@ -417,6 +424,8 @@ ro_sampling_design
 ## Split train/test data
 
 ```{r}
+#| eval: false
+
 ro_samples_sf <- sits_stratified_sampling(
   cube                  = s2_cube_label_v2,
   sampling_design       = ro_sampling_design,
@@ -435,6 +444,8 @@ sf::st_write(ro_samples_sf,
 ## Confusion matrix
 
 ```{r}
+#| eval: false
+
 # Calculate accuracy according to Olofsson's method
 area_acc <- sits_accuracy(s2_cube_label_v2,
   validation = ro_samples_sf,
@@ -450,6 +461,8 @@ area_acc$error_matrix
 ## Times series visualization
 
 ```{r}
+#| eval: false
+
 summary(as.data.frame(ro_samples_sf))
 ```
 
@@ -475,7 +488,7 @@ ee_Initialize()
 #### Housekeeping
 
 ```{r}
-#| eval: true
+#| eval: false
 # convert markdown to script.R 
 knitr::purl("VT0007-deforestation-risk-map.qmd")
 

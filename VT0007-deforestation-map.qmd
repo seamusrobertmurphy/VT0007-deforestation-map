@@ -175,7 +175,6 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname. Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
 
 ```{r}
-#| layout-ncol: 3
 #| eval: false
 
 # 2014 -------------------
@@ -186,7 +185,7 @@ cube_raw_2014 = sits::sits_cube(
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
   roi         = aoi_target,
   start_date  = as.Date("2014-01-01"),
-  end_date    = as.Date("2014-04-01"),
+  end_date    = as.Date("2014-07-01"),
   progress    = T
   )
 
@@ -195,7 +194,7 @@ cube_reg_2014 = sits::sits_regularize(
   cube        = cube_raw_2014,
   roi         = aoi_target,
   res         = 60,
-  period      = "P90D",
+  period      = "P180D",
   output_dir  = here::here("cubes", "reg", "2014"),
   memsize     = 16,
   multicores  = 8,
@@ -210,7 +209,7 @@ cube_raw_2019 = sits::sits_cube(
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
   roi         = aoi_target,
   start_date  = as.Date("2019-01-01"),
-  end_date    = as.Date("2019-04-01"),
+  end_date    = as.Date("2019-07-01"),
   progress    = T
   )
 
@@ -219,7 +218,7 @@ cube_reg_2019 = sits::sits_regularize(
   cube        = cube_raw_2019,
   roi         = aoi_target,
   res         = 60,
-  period      = "P90D",
+  period      = "P180D",
   output_dir  = here::here("cubes", "reg", "2019"),
   memsize     = 16,
   multicores  = 8,
@@ -234,7 +233,7 @@ cube_raw_2024 = sits::sits_cube(
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
   roi         = aoi_target,
   start_date  = as.Date("2024-01-01"),
-  end_date    = as.Date("2024-04-01"),
+  end_date    = as.Date("2024-07-01"),
   progress    = T
   )
 
@@ -243,7 +242,7 @@ cube_reg_2024 = sits::sits_regularize(
   cube        = cube_raw_2024,
   roi         = aoi_target,
   res         = 60,
-  period      = "P90D",
+  period      = "P180D",
   output_dir  = here::here("cubes", "reg", "2024"),
   memsize     = 16,
   multicores  = 8,
@@ -251,29 +250,32 @@ cube_reg_2024 = sits::sits_regularize(
   )
 ```
 
-
 ```{r}
 #| eval: false
+#| layout-ncol: 3
 # plot cube timelines
-plot(cube_reg,
+sits_timeline(cube_reg_2014)
+sits_timeline(cube_reg_2019)
+sits_timeline(cube_reg_2024)
+plot(cube_reg_2014,
   red         = "RED",
   green       = "GREEN",
   blue        = "BLUE",
-  date        = "2013-01-01"
+  date        = "2014-01-03"
   )
 
-plot(cube_reg,
+plot(cube_reg_2019,
   red         = "RED",
   green       = "GREEN",
   blue        = "BLUE",
-  date        = "2018-01-01"
+  date        = "2019-01-08"
   )
 
-plot(cube_reg,
+plot(cube_reg_2024,
   red         = "RED",
   green       = "GREEN",
   blue        = "BLUE",
-  date        = "2023-01-01"
+  date        = "2024-01-07"
   )
 ```
 

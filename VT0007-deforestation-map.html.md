@@ -41,7 +41,7 @@ bibliography: references.bib
 
 The following details two workflow approaches to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows use the same training sample [@stanimirovaGlobalLandCover2023] and STAC-formatted Landsat Collection-2 Level-2 [imagery](https://www.usgs.gov/landsat-missions/landsat-science-products).
 
-Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation. Workflow-2, which is coded in Python and Google Earth Engine functions, is recommended for larger areas of interest ( (***Update java link here***).
+Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation. Workflow-2, which is coded in Python and Google Earth Engine functions, is recommended for larger areas of interest (***Update java link here***).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
@@ -66,15 +66,15 @@ aoi_target = dplyr::filter(aoi_states, State == "Barima-Waini")
 
 tmap::tmap_mode("view")
 tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
-  tmap::tm_text("State", col = "white", size = 1, alpha = 0.3) +
+  tmap::tm_text("State", col = "white", size = 1, alpha = 0.3, just = "bottom") +
   tmap::tm_shape(aoi_country) + tmap::tm_borders(col = "white", lwd = 1) +
   tmap::tm_shape(aoi_target) + tmap::tm_borders(col = "red", lwd = 2) +
-  tmap::tm_text("State", col = "red", size = 1.5) +
+  tmap::tm_text("State", col = "red", size = 1.3) +
   tmap::tm_basemap("Esri.WorldImagery")
 ```
 
 ::: {.cell-output-display}
-preservede6da31fceb4f67e
+preserve1840da035d4ca442
 :::
 :::
 
@@ -84,56 +84,109 @@ preservede6da31fceb4f67e
 We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname. Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
 
 
-::: {.cell layout-ncol="3"}
+::: {.cell}
 
 ```{.r .cell-code}
+# 2014 -------------------
 # cloud-assemble data cube
-cube_raw = sits::sits_cube(
+cube_raw_2014 = sits::sits_cube(
   source      = "MPC",
   collection  = "LANDSAT-C2-L2",
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
-  roi         = aoi_country,
+  roi         = aoi_target,
   start_date  = as.Date("2014-01-01"),
-  end_date    = as.Date("2014-04-01"),
-  output_dir  = here::here("cubes", "01-raw"),
+  end_date    = as.Date("2014-07-01"),
   progress    = T
   )
 
 # regularize data cube
-cube_reg = sits::sits_regularize(
-  cube        = cube_local,
-  roi         = aoi_country,
-  res         = 30,
-  period      = "P5Y",
-  output_dir  = here::here("cubes", "reg"),
+cube_reg_2014 = sits::sits_regularize(
+  cube        = cube_raw_2014,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P180D",
+  output_dir  = here::here("cubes", "reg", "2014"),
   memsize     = 16,
-  multicores  = 4,
+  multicores  = 8,
   progress    = T
   )
 
-# review cube timeline
-sits::sits_timeline(cube_reg)
-
-# plot cube timeline
-plot(cube_reg,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2013-01-01"
+# 2019 -------------------
+# cloud-assemble data cube
+cube_raw_2019 = sits::sits_cube(
+  source      = "MPC",
+  collection  = "LANDSAT-C2-L2",
+  bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
+  roi         = aoi_target,
+  start_date  = as.Date("2019-01-01"),
+  end_date    = as.Date("2019-07-01"),
+  progress    = T
   )
 
-plot(cube_reg,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2018-01-01"
+# regularize data cube
+cube_reg_2019 = sits::sits_regularize(
+  cube        = cube_raw_2019,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P180D",
+  output_dir  = here::here("cubes", "reg", "2019"),
+  memsize     = 16,
+  multicores  = 8,
+  progress    = T
   )
 
-plot(cube_reg,
+# 2024 -------------------
+# cloud-assemble data cube
+cube_raw_2024 = sits::sits_cube(
+  source      = "MPC",
+  collection  = "LANDSAT-C2-L2",
+  bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
+  roi         = aoi_target,
+  start_date  = as.Date("2024-01-01"),
+  end_date    = as.Date("2024-07-01"),
+  progress    = T
+  )
+
+# regularize data cube
+cube_reg_2024 = sits::sits_regularize(
+  cube        = cube_raw_2024,
+  roi         = aoi_target,
+  res         = 60,
+  period      = "P180D",
+  output_dir  = here::here("cubes", "reg", "2024"),
+  memsize     = 16,
+  multicores  = 8,
+  progress    = T
+  )
+```
+:::
+
+::: {.cell layout-ncol="3"}
+
+```{.r .cell-code}
+# plot cube timelines
+sits_timeline(cube_reg_2014)
+sits_timeline(cube_reg_2019)
+sits_timeline(cube_reg_2024)
+plot(cube_reg_2014,
   red         = "RED",
   green       = "GREEN",
   blue        = "BLUE",
-  date        = "2023-01-01"
+  date        = "2014-01-03"
+  )
+
+plot(cube_reg_2019,
+  red         = "RED",
+  green       = "GREEN",
+  blue        = "BLUE",
+  date        = "2019-01-08"
+  )
+
+plot(cube_reg_2024,
+  red         = "RED",
+  green       = "GREEN",
+  blue        = "BLUE",
+  date        = "2024-01-07"
   )
 ```
 :::

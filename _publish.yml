@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 73ba42fb-e37b-4a8e-88e5-3e6007ec04fe
+      url: 'https://seamusrobertmurphy.quarto.pub/vt0007-deforestation-map'

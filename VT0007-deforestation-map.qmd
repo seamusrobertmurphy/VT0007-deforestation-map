@@ -66,6 +66,7 @@ easypackages::packages(
   "geojsonsf",
   "giscoR",
   "googledrive",
+  "googleCloudStorageR",
   "hdf5r", 
   "htmltools",
   "httr", 
@@ -151,9 +152,49 @@ Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it
 ## 1.1 Testing phase
 
 ```{python}
-import numpy as np
+#| eval: false
 import sys 
 print(sys.executable)
+```
+
+```{r}
+# remotes::install_github("r-spatial/rgee") Install rgee v.1.3
+library(rgee)
+library(googledrive)
+library(googleCloudStorageR)
+pak::pkg_install('googleCloudStorageR')
+SaK_file <- "/home/seamus/Repos/api-keys/SaK_rgee.json" 
+
+# Assign the SaK to a EE user.
+ee_utils_sak_copy(
+  sakfile =  SaK_file,
+  users = c("seamusrobertmurphy"))
+
+# Validate your SaK
+ee_utils_sak_validate()
+
+```
+
+```{r}
+library(rgee)
+library(googledrive)
+library(googleCloudStorageR)
+email <- "seamusrobertmurphy@gmail.com"
+oauth_func_path <- system.file("python/ee_utils.py", package = "rgee")
+utils_py <- rgee:::ee_source_python(oauth_func_path)
+ee_path <- ee_utils_py_to_r(utils_py$ee_path())
+email_clean <- gsub("@gmail.com", "", email)
+ee_path_user <- sprintf("%s/%s", ee_path, email_clean)
+print(ee_path_user)
+
+# Is there some Google Drive Token in this Folder?
+full_credentials <- list.files(path = ee_path_user, full.names = TRUE)
+drive_condition <- grepl(".*_.*@.*", basename(full_credentials))
+
+googledrive::drive_auth(
+  email = NULL,
+  cache = ee_path_user
+)
 ```
 
 ### Jurisdictional boundaries

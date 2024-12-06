@@ -56,8 +56,17 @@ Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it
 ```{.python .cell-code}
 import numpy as np
 import sys 
-print()
+print(sys.executable)
 ```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+/home/seamus/Repos/VT0007-deforestation-map/bin/python
+```
+
+
+:::
 :::
 
 
@@ -86,7 +95,7 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 ```
 
 ::: {.cell-output-display}
-preservea3083add96f21a5c
+preserve27e5f8bf28531d4a
 :::
 :::
 

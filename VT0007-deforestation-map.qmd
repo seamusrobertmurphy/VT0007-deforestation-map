@@ -149,6 +149,10 @@ Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it
 
 ## 1.1 Testing phase
 
+```{python}
+import numpy as mp
+```
+
 ### Jurisdictional boundaries
 
 ```{r}

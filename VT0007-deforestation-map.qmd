@@ -31,6 +31,7 @@ df-print: kable
 keep-md: true
 prefer-html: true
 bibliography: references.bib
+engine: knitr
 ---
 
 ```{r setup}
@@ -150,7 +151,9 @@ Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it
 ## 1.1 Testing phase
 
 ```{python}
-import numpy as mp
+import numpy as np
+import sys 
+print(sys.executable)
 ```
 
 ### Jurisdictional boundaries

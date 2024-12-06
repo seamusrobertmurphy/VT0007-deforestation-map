@@ -7,5 +7,38 @@
   },
   "VT0007-deforestation-map.qmd": {
     "VT0007-deforestation-map.html": "96279a7e"
+  },
+  "lib/python3.8/site-packages/cffi/recompiler.py": {
+    "recompiler.html": "c2287bff"
+  },
+  "lib/python3.8/site-packages/httpx-0.28.1.dist-info/licenses/LICENSE.md": {
+    "LICENSE.html": "2551664c"
+  },
+  "lib/python3.8/site-packages/idna-3.10.dist-info/LICENSE.md": {
+    "LICENSE.html": "74db96c2"
+  },
+  "lib/python3.8/site-packages/httpcore-1.0.7.dist-info/licenses/LICENSE.md": {
+    "LICENSE.html": "82a9df3f"
+  },
+  "lib/python3.8/site-packages/pandas-2.0.3.dist-info/AUTHORS.md": {
+    "AUTHORS.html": "9d5784b7"
+  },
+  "lib/python3.8/site-packages/soupsieve-2.6.dist-info/licenses/LICENSE.md": {
+    "LICENSE.html": "dfd783ec"
+  },
+  "lib/python3.8/site-packages/matplotlib/backends/web_backend/nbagg_uat.ipynb": {
+    "nbagg_uat.html": "13a1f346"
+  },
+  "lib/python3.8/site-packages/pandas/tests/indexes/period/test_indexing.py": {
+    "test_indexing.html": "c0f7ac73"
+  },
+  "lib/python3.8/site-packages/pandas/tests/indexes/period/test_constructors.py": {
+    "test_constructors.html": "a75a3e6f"
+  },
+  "lib/python3.8/site-packages/pandas/tests/indexes/datetimes/test_indexing.py": {
+    "test_indexing.html": "e12e1828"
+  },
+  "lib/python3.8/site-packages/pyzmq-26.2.0.dist-info/licenses/LICENSE.md": {
+    "LICENSE.html": "8b870894"
   }
 }

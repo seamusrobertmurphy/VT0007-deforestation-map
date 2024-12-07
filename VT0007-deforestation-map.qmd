@@ -8,7 +8,7 @@ author:
     degrees:
       - PhD
 abstract: > 
-  The following starter script documents two workflows for deriving deforestation 
+  The following starter script documents a workflow for deriving deforestation 
   risk maps in accordance with Verra's new methodology for unplanned 
   deforestation allocation in jurisdictional nested REDD+ projects using the 
   [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).
@@ -141,13 +141,13 @@ sf::sf_use_s2(use_s2 = FALSE)
 
 ## Summary
 
-The following details two workflow approaches to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. For comparison purposes, both workflows use the same training sample [@stanimirovaGlobalLandCover2023] and STAC-formatted Landsat Collection-2 Level-2 [imagery](https://www.usgs.gov/landsat-missions/landsat-science-products).
-
-Workflow-1 is coded in R and is recommended for smaller areas of analysis, as it offers additional functions for model tuning and classifer evaluation. Workflow-2, which is coded in Python and Google Earth Engine functions, is recommended for larger areas of interest (***Update java link here***).
+The following details a workflow approach to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. Workflow inputs include a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023] and the imagery from the Landsat Collection-2 Level-2 Tier-1 processed [rasters](https://www.usgs.gov/landsat-missions/landsat-science-products).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
 # 1. Testing phase
+
+### Setup or restore virtual environment: `Python > R > Python`
 
 ```{python}
 #| eval: false
@@ -173,6 +173,8 @@ python3 -m pip install numpy jupyter earthengine-api
 python3 -m pip freeze > requirements.txt
 ```
 
+### Assign `rgee` and cloud directory  
+
 ```{r}
 library(rgee)
 library(reticulate)
@@ -187,7 +189,7 @@ rgee::ee_path = path.expand("/home/seamus/.config/earthengine/seamusrobertmurphy
 
 ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
 # Assign the SaK & user.
-SaK_file <- "/home/seamus/Repos/api-keys/SaK_rgee.json" 
+SaK_file = "/home/seamus/Repos/api-keys/SaK_rgee.json" 
 ee_utils_sak_copy(sakfile =  SaK_file, users = "seamusrobertmurphy")
 
 # Confirm project_id & bucket
@@ -205,65 +207,23 @@ ee_utils_sak_validate(
  )
 ```
 
-```{r}
-
-# Define an study area
-EE_geom <- ee$Geometry$Point(c(-70.06240, -6.52077))$buffer(5000)
-
-l8img <- ee$ImageCollection$Dataset$LANDSAT_LC08_C02_T2_L2 %>% 
-  ee$ImageCollection$filterDate('2021-06-01', '2021-12-01') %>% 
-  ee$ImageCollection$filterBounds(EE_geom) %>% 
-  ee$ImageCollection$first()
-
-gcs_l8_name  <- "l8demo2" 
-
-task <- ee_image_to_gcs(
-  image = l8img$select(sprintf("SR_B%s",1:5)),
-  region = EE_geom,
-  fileNamePrefix = gcs_l8_name,
-  timePrefix = FALSE,
-  bucket = "deforisk_bucket_1",
-  scale = 10,
-  formatOptions = list(cloudOptimized = TRUE) #COG formatting
-)
-task$start()
-ee_monitoring()
-
-
-# Make PUBLIC the GCS object 
-googleCloudStorageR::gcs_update_object_acl(
-  object_name = paste0(gcs_l8_name, ".tif"),
-  bucket = "deforisk_bucket_1",
-  entity_type = "allUsers"
-)
-
-img_id <- sprintf("https://storage.googleapis.com/%s/%s.tif", "deforisk_bucket_1", gcs_l8_name)
-visParams <- list(bands=c("SR_B4","SR_B3","SR_B2"), min = 8000, max = 20000, nodata = 0)
-Map$centerObject(img_id)
-
-first = Map$addLayer(
-      eeObject = img_id, 
-      visParams = visParams,
-      name = "My_first_COG",
-      titiler_server = "https://api.cogeo.xyz/"
- )
-
-first |> leaflet::addProviderTiles("Esri.WorldImagery") 
-
-```
-
 ### Jurisdictional boundaries
 
 ```{r}
 # assign master crs
-crs_master  = sf::st_crs("epsg:4326")
-aoi_country = geodata::gadm(country="GUY", level=0, path=tempdir()) |>
+crs_master    = sf::st_crs("epsg:4326")
+# derive aoi windows
+aoi_country   = geodata::gadm(country="GUY", level=0, path=tempdir()) |>
   sf::st_as_sf() |> sf::st_cast() |> sf::st_transform(crs_master)
-aoi_states = geodata::gadm(country="GUY", level=1, path=tempdir()) |>
+
+aoi_states    = geodata::gadm(country="GUY", level=1, path=tempdir()) |>
   sf::st_as_sf() |> sf::st_cast() |> sf::st_transform(crs_master) |>
   dplyr::rename(State = NAME_1)
-aoi_target = dplyr::filter(aoi_states, State == "Barima-Waini")
 
+aoi_target    = dplyr::filter(aoi_states, State == "Barima-Waini") 
+aoi_target_ee = rgee::sf_as_ee(aoi_target)
+
+# visualize
 tmap::tmap_mode("view")
 tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
   tmap::tm_text("State", col = "white", size = 1, alpha = 0.3, just = "bottom") +
@@ -271,8 +231,6 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
   tmap::tm_shape(aoi_target) + tmap::tm_borders(col = "red", lwd = 2) +
   tmap::tm_text("State", col = "red", size = 1.3) +
   tmap::tm_basemap("Esri.WorldImagery")
-
-
 ```
 
 ### Assemble HRP time series
@@ -281,6 +239,13 @@ We assemble and process a data cube representing a historical reference period (
 
 ```{r}
 #| eval: false
+
+
+# Search into the Earth Engine’s public data archive
+LSC208 = "LANDSAT/LC08/C02/T1_L2"
+ee_utils_dataset_display(LSC208)
+
+rgee::ee_search
 
 # 2014 -------------------
 # cloud-assemble data cube

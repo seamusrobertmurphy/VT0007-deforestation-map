@@ -64,6 +64,7 @@ easypackages::packages(
   "gdalUtilities", 
   "geodata",
   "geojsonsf",
+  "geojsonio",
   "giscoR",
   "googledrive",
   "googleCloudStorageR",
@@ -147,11 +148,13 @@ The following details a workflow approach to Verra's recommended sequence of def
 
 # 1. Testing phase
 
-### Setup or restore virtual environment: `Python > R > Python`
+### Setup or restore virtual environment: `Python->R`
+
+To avoid issues with IDE settings, it is recommended to run the following virtual environment functions from an external terminal. To update an existing environment, run `python3 pip install requirements.txt` from terminal in trunk directory.
 
 ```{python}
 #| eval: false
-# recommend building virtual environment from terminal outside IDE 
+# create virtual environment 
 python3 -m venv working_director_name
 
 # activate environment's python
@@ -173,9 +176,10 @@ python3 -m pip install numpy jupyter earthengine-api
 python3 -m pip freeze > requirements.txt
 ```
 
-### Assign `rgee` and cloud directory  
+#### Assign `rgee` and cloud directory
 
 ```{r}
+#| eval: false
 library(rgee)
 library(reticulate)
 library(googledrive)
@@ -183,12 +187,13 @@ library(googleCloudStorageR)
 
 reticulate::use_python("./bin/python3")
 reticulate::py_run_string("import ee; ee.Initialize()")
-rgee::ee_install_set_pyenv(py_path = ",/bin/python3", py_env = "./")
+rgee::ee_install_set_pyenv(py_path = "./bin/python3", py_env = "./")
 rgee::ee_path = path.expand("/home/seamus/.config/earthengine/seamusrobertmurphy/credentials")
+ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
 #ee_install()
 
-ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
-# Assign the SaK & user.
+################################################
+# Assign the SaK & user for interactive web renders
 SaK_file = "/home/seamus/Repos/api-keys/SaK_rgee.json" 
 ee_utils_sak_copy(sakfile =  SaK_file, users = "seamusrobertmurphy")
 
@@ -235,49 +240,117 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 
 ### Assemble HRP time series
 
-We assemble and process a data cube representing a historical reference period (HRP) between 2013-06-01 and 2023-06-01 for the state of Barina Waini, Guyana.
+We assemble a raster data cube representing a ten year historical reference period (HRP) between 2014-01-01 and 2024-12-31 for the state of Barina Waini, Guyana.
 
-Using the following functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
+```{r}
+years_all <- data.frame(
+  years_start = c((seq(as.Date("2014-01-01"), as.Date("2024-01-01"), by = "years"))) %>% 
+    as.character(),
+  years_end =   c((seq(as.Date("2014-12-31"), as.Date("2024-12-31"), by = "years"))) %>% 
+    as.character(),
+  years = c(seq("2014", "2024"))
+)
+
+months_all <- data.frame(
+  months_start = c((seq(as.Date("2014-01-01"), as.Date("2024-12-01"), by = "months"))) %>% 
+    as.character(),
+  months_end =   c((seq(as.Date("2014-01-31"), as.Date("2024-12-31"), by = "months"))) %>% 
+    as.character(),
+  months = c(seq("01", "12")),
+  years = c(rep(2014:2024, each=12))
+)
+
+slice_sz = 200
+n_obsv = 1375 #n ZCTAs
+n_slice = floor(n_obsv/slice_sz)
+```
+
+Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
+
+```{r}
+mask <- function(image) {
+  # Bit 0 - Fill
+  # Bit 1 - Dilated Cloud
+  # Bit 2 - Cirrus
+  # Bit 3 - Cloud
+  # Bit 4 - Cloud Shadow
+  qaMask <- image$select('QA_PIXEL')$bitwiseAnd(as.integer(intToBits(31)[1:5]))$eq(0) 
+  saturationMask <- image$select('QA_RADSAT')$eq(0)
+  opticalBands <- image$select('SR_B.*')$multiply(0.0000275)$add(-0.2)
+  thermalBands <- image$select('ST_B.*')$multiply(0.00341802)$add(149.0)
+  image$
+    addBands(opticalBands, NULL, TRUE)$
+    addBands(thermalBands, NULL, TRUE)$
+    updateMask(qaMask)$
+    updateMask(saturationMask)
+}
+
+collection = ee$ImageCollection('LANDSAT/LC08/C02/T1_L2')$
+  filterBounds(aoi_target_ee)$
+  filterDate('2021-01-01', '2022-05-01')$
+  map(mask)
+
+image = collection$median()
+
+
+Map$centerObject(image)
+Map$addLayer(image,
+  list(bands = c('SR_B4', 'SR_B3', 'SR_B2'), 
+       min = 0, max = 0.25), 'image'
+            )
+
+
+Map.setCenter(-4.52, 40.29, 7);  // Iberian Peninsula
+Map.addLayer(composite, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min: 0, max: 0.3});
+
+
+bands <- c('SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7', 'ST_B10')
+
+
+
+
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+                     .filterDate('2020-01-01', '2021-01-01')
+                     .map(maskL8sr);
+
+var composite = collection.median();
+
+
+
+function maskL8sr(image) {
+  // Bit 0 - Fill
+  // Bit 1 - Dilated Cloud
+  // Bit 2 - Cirrus
+  // Bit 3 - Cloud
+  // Bit 4 - Cloud Shadow
+  var qaMask = image.select('QA_PIXEL').bitwiseAnd(parseInt('11111', 2)).eq(0);
+  var saturationMask = image.select('QA_RADSAT').eq(0);
+
+  // Apply the scaling factors to the appropriate bands.
+  var opticalBands = image.select('SR_B.').multiply(0.0000275).add(-0.2);
+  var thermalBands = image.select('ST_B.*').multiply(0.00341802).add(149.0);
+
+  // Replace the original bands with the scaled ones and apply the masks.
+  return image.addBands(opticalBands, null, true)
+      .addBands(thermalBands, null, true)
+      .updateMask(qaMask)
+      .updateMask(saturationMask);
+}
+
+// Map the function over one year of data.
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+                     .filterDate('2020-01-01', '2021-01-01')
+                     .map(maskL8sr);
+
+var composite = collection.median();
+
+// Display the results.
+Map.setCenter(-4.52, 40.29, 7);  // Iberian Peninsula
+Map.addLayer(composite, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min: 0, max: 0.3});
+```
 
 ```{r}
 #| eval: false
-
-# search EE Catalog & assign dataset 
-dataset_2013 = ee$ImageCollection('LANDSAT/LC08/C02/T1_L2')
-
-# reduce image neighborhood for faster runtime
-reduceFunction = function(image) {
-  image$reduceNeighborhood(
-    reducer = ee$Reducer$mean(),
-    kernel  = ee$Kernel$square(4)
-  )
-}
-
-
-qaMask = image$select('QA_PIXEL')$bitwiseAnd(parseInt('11111', 2))$eq(0);
-
-getQABits <- function(image, qa) { # pixel quality subfilter   
-  # converts to decimal
-  qa <- sum(2^(which(rev(unlist(strsplit(as.character(qa), "")) == 1))-1))
-  # returns a mask band image, assigning qa value.
-  image$bitwiseAnd(qa)$lt(1)
-}
-
-# using getQABits, build master filter
-l8_clean <- function(image) {
-  ndvi_values <- image$normalizedDifference(c("SR_B5","SR_B4"))
-  # Extract the quality band
-  ndvi_qa <- image$select("QA_PIXEL")
-
-  # Select pixels to mask
-  quality_mask <- getQABits(ndvi_qa, "00000100001")
-
-  # Mask pixels with value zero.
-  ndvi_values %>%
-    ee$Image$updateMask(quality_mask) %>%
-    ee$Image$copyProperties(img, list("system:time_start"))
-}
-
 # 2014 -------------------
 # cloud-assemble data cube
 cube_raw_2014 = sits::sits_cube(

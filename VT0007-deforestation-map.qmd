@@ -235,17 +235,48 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 
 ### Assemble HRP time series
 
-We assemble and process a data cube representing a historical reference period (HRP) between 2013-01-01 and 2023-01-01 for the country of Suriname. Using the `sits_regularize` functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
+We assemble and process a data cube representing a historical reference period (HRP) between 2013-06-01 and 2023-06-01 for the state of Barina Waini, Guyana.
+
+Using the following functions, we apply a cloud masking and pixel back-filling based on cloudless ranking and median-normalization across 5-year intervals to derive three dry-season mosaics for 2013, 2018 and 2023.
 
 ```{r}
 #| eval: false
 
+# search EE Catalog & assign dataset 
+dataset_2013 = ee$ImageCollection('LANDSAT/LC08/C02/T1_L2')
 
-# Search into the Earth Engine’s public data archive
-LSC208 = "LANDSAT/LC08/C02/T1_L2"
-ee_utils_dataset_display(LSC208)
+# reduce image neighborhood for faster runtime
+reduceFunction = function(image) {
+  image$reduceNeighborhood(
+    reducer = ee$Reducer$mean(),
+    kernel  = ee$Kernel$square(4)
+  )
+}
 
-rgee::ee_search
+
+qaMask = image$select('QA_PIXEL')$bitwiseAnd(parseInt('11111', 2))$eq(0);
+
+getQABits <- function(image, qa) { # pixel quality subfilter   
+  # converts to decimal
+  qa <- sum(2^(which(rev(unlist(strsplit(as.character(qa), "")) == 1))-1))
+  # returns a mask band image, assigning qa value.
+  image$bitwiseAnd(qa)$lt(1)
+}
+
+# using getQABits, build master filter
+l8_clean <- function(image) {
+  ndvi_values <- image$normalizedDifference(c("SR_B5","SR_B4"))
+  # Extract the quality band
+  ndvi_qa <- image$select("QA_PIXEL")
+
+  # Select pixels to mask
+  quality_mask <- getQABits(ndvi_qa, "00000100001")
+
+  # Mask pixels with value zero.
+  ndvi_values %>%
+    ee$Image$updateMask(quality_mask) %>%
+    ee$Image$copyProperties(img, list("system:time_start"))
+}
 
 # 2014 -------------------
 # cloud-assemble data cube

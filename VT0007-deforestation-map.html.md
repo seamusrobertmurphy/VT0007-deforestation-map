@@ -35,13 +35,15 @@ engine: knitr
 
 # Summary
 
-The following details a possible workflow approach to Verra's recommended sequence of deforestation risk map development [@verraVT0007UnplannedDeforestation2021; Figure 1] . Workflow inputs include a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023] and the imagery from the Landsat Collection-2 Level-2 Tier-1 processed [rasters](https://www.usgs.gov/landsat-missions/landsat-science-products).
+The following details a possible workflow approach to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021.
+
+Training data was sourced from a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023]. Satellite imagery was sourced from the [Landsat Collection-2 Tier-1 Level-2](https://www.usgs.gov/landsat-missions/landsat-science-products) raster dataset. Data acquisition and pre-processing of satellite imagery was implemented in a google colab runtime [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map/blob/main/VT0007_data_preprocessing.ipynb).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
 ## Environment setup
 
-**Build/restore virtual environment: `Python -> R`**
+**Restore virtual environment**
 
 To avoid issues with IDE settings, it is recommended to run the following virtual environment functions from an terminal external to RStudio or VScode. To update an previously loaded environment, simply run `pip3 install -r requirements.txt` in any terminal from the trunk directory.
 
@@ -88,11 +90,11 @@ reticulate::use_python("./bin/python3")
 reticulate::py_run_string("import ee; ee.Initialize()")
 rgee::ee_install_set_pyenv(py_path = "./bin/python3", py_env = "./")
 rgee::ee_path = path.expand("/home/seamus/.config/earthengine/seamusrobertmurphy/credentials")
-ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
-#ee_install()
+# rgee::ee_install()
+rgee::ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
 
-################################################
-# Assign the SaK & user for interactive web renders
+
+# asssign the SaK & user for interactive web renders
 SaK_file = "/home/seamus/Repos/api-keys/SaK_rgee.json" 
 ee_utils_sak_copy(sakfile =  SaK_file, users = "seamusrobertmurphy")
 
@@ -116,6 +118,8 @@ ee_utils_sak_validate(
 **Jurisdictional boundaries**
 
 
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -131,30 +135,19 @@ aoi_states    = geodata::gadm(country="GUY", level=1, path=tempdir()) |>
 
 aoi_target    = dplyr::filter(aoi_states, State == "Barima-Waini") 
 aoi_target_ee = rgee::sf_as_ee(aoi_target)
-```
 
-::: {.cell-output .cell-output-error}
-
-```
-Earth Engine client library not initialized. Run `ee.Initialize()`
-```
-
-
-:::
-
-```{.r .cell-code}
 # visualize
 tmap::tmap_mode("view")
 tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
   tmap::tm_text("State", col = "white", size = 1, alpha = 0.3, just = "bottom") +
   tmap::tm_shape(aoi_country) + tmap::tm_borders(col = "white", lwd = 1) +
   tmap::tm_shape(aoi_target) + tmap::tm_borders(col = "red", lwd = 2) +
-  tmap::tm_text("State", col = "red", size = 1.3) +
+  tmap::tm_text("State", col = "red", size = 2) +
   tmap::tm_basemap("Esri.WorldImagery")
 ```
 
 ::: {.cell-output-display}
-preserve2ea6d8426542648d
+preserve8e056fe8355bd2f6
 :::
 :::
 
@@ -174,7 +167,7 @@ cube_2014 = sits_cube(
   source     = "MPC",
   collection = "LANDSAT-C2-L2",
   data_dir   = here::here("cubes", "mosaic"),
-  bands      = c("B2", "B3", "B4", "B5", "B6", "B7", "B10", "NDVI"),
+  bands      = c("BLUE", "GREEN", "RED", "RED", "NIR08", "SWIR16", "SWIR22", "NDVI"),
   version    = "mosaic"
 )
 
@@ -283,7 +276,7 @@ plot(cube_reg_2024,
 :::
 
 
-### LULC classification
+## LULC classification
 
 We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix. The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
 

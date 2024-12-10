@@ -154,12 +154,12 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 ```
 
 ::: {.cell-output-display}
-preserve58821f14076b71a2
+preserve2ea6d8426542648d
 :::
 :::
 
 
-### Assemble HRP data cube
+## Assemble HRP data cube
 
 We assemble a raster data cube representing a ten year historical reference period (HRP) between 2014-01-01 and 2024-12-31 for the state of Barina Waini, Guyana. Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
 
@@ -167,6 +167,17 @@ We assemble a raster data cube representing a ten year historical reference peri
 ::: {.cell}
 
 ```{.r .cell-code}
+cube_terra = terra::rast("./cubes/mosaic/LANDSAT-C2-L2_OLI_TILE_BAND_2014-01-11.tif")
+names(cube_terra)
+
+cube_2014 = sits_cube(
+  source     = "MPC",
+  collection = "LANDSAT-C2-L2",
+  data_dir   = here::here("cubes", "mosaic"),
+  bands      = c("B2", "B3", "B4", "B5", "B6", "B7", "B10", "NDVI"),
+  version    = "mosaic"
+)
+
 # 2014 -------------------
 # cloud-assemble data cube
 cube_raw_2014 = sits::sits_cube(
@@ -272,7 +283,7 @@ plot(cube_reg_2024,
 :::
 
 
-### Classify HRP time series
+### LULC classification
 
 We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix. The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
 

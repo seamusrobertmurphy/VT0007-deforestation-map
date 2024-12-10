@@ -143,7 +143,7 @@ The following details a possible workflow approach to Verra's recommended sequen
 
 ## Environment setup
 
-**Build/restore virtual environment: `Python -> R`**
+**Build/restore virtual environment**
 
 To avoid issues with IDE settings, it is recommended to run the following virtual environment functions from an terminal external to RStudio or VScode. To update an previously loaded environment, simply run `pip3 install -r requirements.txt` in any terminal from the trunk directory.
 
@@ -352,7 +352,7 @@ plot(cube_reg_2024,
   )
 ```
 
-### LULC classification
+## LULC classification
 
 We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix. The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
 

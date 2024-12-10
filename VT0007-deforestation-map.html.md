@@ -5,13 +5,8 @@ author:
   - name: Seamus Murphy
     orcid: 0000-0002-1792-0351 
     email: seamusrobertmurphy@gmail.com
-    degrees:
-      - PhD
 abstract: > 
-  The following starter script documents a workflow for deriving deforestation 
-  risk maps in accordance with Verra's new methodology for unplanned 
-  deforestation allocation in jurisdictional nested REDD+ projects using the 
-  [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).
+  A workflow for deriving deforestation risk maps in accordance with Verra's new methodology for unplanned deforestation allocation in jurisdictional nested REDD+ projects using [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).
 keywords:
   - REDD+
   - VCS
@@ -38,17 +33,17 @@ engine: knitr
 
 
 
-## Summary
+# Summary
 
-The following details a workflow approach to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021. Workflow inputs include a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023] and the imagery from the Landsat Collection-2 Level-2 Tier-1 processed [rasters](https://www.usgs.gov/landsat-missions/landsat-science-products).
+The following details a possible workflow approach to Verra's recommended sequence of deforestation risk map development [@verraVT0007UnplannedDeforestation2021; Figure 1] . Workflow inputs include a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023] and the imagery from the Landsat Collection-2 Level-2 Tier-1 processed [rasters](https://www.usgs.gov/landsat-missions/landsat-science-products).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](VT0007-risk-map-development-sequence.png)
 
-# 1. Testing phase
+## Environment setup
 
-### Setup or restore virtual environment: `Python->R`
+**Build/restore virtual environment: `Python -> R`**
 
-To avoid issues with IDE settings, it is recommended to run the following virtual environment functions from an external terminal. To update an existing environment, run `python3 pip install requirements.txt` from terminal in trunk directory.
+To avoid issues with IDE settings, it is recommended to run the following virtual environment functions from an terminal external to RStudio or VScode. To update an previously loaded environment, simply run `pip3 install -r requirements.txt` in any terminal from the trunk directory.
 
 
 ::: {.cell}
@@ -67,18 +62,18 @@ print(sys.executable)
 quit()
 
 # restore environment of cloned repo
-python3 pip install requirements.txt
+python3 pip install -r requirements.txt
 
-# install packages requirements manually
+# install packages manually
 python3 -m pip install numpy jupyter earthengine-api
 
-# record index of loaded packages
+# save index of loaded packages
 python3 -m pip freeze > requirements.txt
 ```
 :::
 
 
-#### Assign `rgee` and cloud directory
+**Assign `rgee` kernel, `gcs` directory & credentials**
 
 
 ::: {.cell}
@@ -91,7 +86,7 @@ library(googleCloudStorageR)
 
 reticulate::use_python("./bin/python3")
 reticulate::py_run_string("import ee; ee.Initialize()")
-rgee::ee_install_set_pyenv(py_path = ",/bin/python3", py_env = "./")
+rgee::ee_install_set_pyenv(py_path = "./bin/python3", py_env = "./")
 rgee::ee_path = path.expand("/home/seamus/.config/earthengine/seamusrobertmurphy/credentials")
 ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
 #ee_install()
@@ -118,7 +113,7 @@ ee_utils_sak_validate(
 :::
 
 
-### Jurisdictional boundaries
+**Jurisdictional boundaries**
 
 
 ::: {.cell}
@@ -159,111 +154,15 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 ```
 
 ::: {.cell-output-display}
-preserve58adfb0a4c24115b
+preserve58821f14076b71a2
 :::
 :::
 
 
-### Assemble HRP time series
+### Assemble HRP data cube
 
-We assemble a raster data cube representing a ten year historical reference period (HRP) between 2014-01-01 and 2024-12-31 for the state of Barina Waini, Guyana.
+We assemble a raster data cube representing a ten year historical reference period (HRP) between 2014-01-01 and 2024-12-31 for the state of Barina Waini, Guyana. Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
 
-
-::: {.cell}
-
-```{.r .cell-code}
-years_all <- data.frame(
-  years_start = c((seq(as.Date("2014-01-01"), as.Date("2024-01-01"), by = "years"))) %>% 
-    as.character(),
-  years_end =   c((seq(as.Date("2014-12-31"), as.Date("2024-12-31"), by = "years"))) %>% 
-    as.character(),
-  years = c(seq("2014", "2024"))
-)
-
-months_all <- data.frame(
-  months_start = c((seq(as.Date("2014-01-01"), as.Date("2024-12-01"), by = "months"))) %>% 
-    as.character(),
-  months_end =   c((seq(as.Date("2014-01-31"), as.Date("2024-12-31"), by = "months"))) %>% 
-    as.character(),
-  months = c(seq("01", "12")),
-  years = c(rep(2014:2024, each=12))
-)
-
-slice_sz = 200
-n_obsv = 1375 #n ZCTAs
-n_slice = floor(n_obsv/slice_sz)
-```
-:::
-
-
-Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
-
-
-::: {.cell}
-
-```{.r .cell-code}
-mask = function(image) {
-     qa_mask = image$select('QA_PIXEL')$bitwiseAnd(bitwShiftL(1, 5) - 1)$eq(0) # bitwShiftL(1, 5) - 1 = 31
-     saturation_mask = image$select('QA_RADSAT')$eq(0)
-  get_factor_img = function(factor_names) {
-     factor_list  = image$toDictionary()$select(factor_names)$values()
-     ee$Image$constant(factor_list)
-  }
-  scale_img  = get_factor_img(c('REFLECTANCE_MULT_BAND_.|TEMPERATURE_MULT_BAND_ST_B10'))
-  offset_img = get_factor_img(c('REFLECTANCE_ADD_BAND_.|TEMPERATURE_ADD_BAND_ST_B10'))
-  scaled     = image$select('SR_B.|ST_B10')$multiply(scale_img)$add(offset_img)
-  image$addBands(scaled, NULL, TRUE)$updateMask(qa_mask)$updateMask(saturation_mask)
-}
-
-# Make a cloud-free Landsat 8 surface reflectance composite
-l8_image = ee$ImageCollection('LANDSAT/LC08/C02/T1_L2')$
-  filterBounds(aoi_target_ee)$
-  filterDate('2021-03-01', '2021-07-01')$
-  map(mask)$
-  median()
-```
-
-::: {.cell-output .cell-output-error}
-
-```
-Earth Engine client library not initialized. Run `ee.Initialize()`
-```
-
-
-:::
-
-```{.r .cell-code}
-bands <- c('SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7', 'ST_B10')
-
-Map$centerObject(l8_image)
-```
-
-::: {.cell-output .cell-output-error}
-
-```
-Error in eval(expr, envir, enclos): object 'l8_image' not found
-```
-
-
-:::
-
-```{.r .cell-code}
-Map$addLayer(
-  l8_image,
-  list(bands = c('SR_B4', 'SR_B3', 'SR_B2'), min = 0, max = 0.25),
-  'image'
-)
-```
-
-::: {.cell-output .cell-output-error}
-
-```
-Error in eval(expr, envir, enclos): object 'l8_image' not found
-```
-
-
-:::
-:::
 
 ::: {.cell}
 
@@ -276,7 +175,7 @@ cube_raw_2014 = sits::sits_cube(
   bands       = c("RED", "GREEN", "BLUE", "NIR08", "SWIR16", "CLOUD"),
   roi         = aoi_target,
   start_date  = as.Date("2014-01-01"),
-  end_date    = as.Date("2014-07-01"),
+  end_date    = as.Date("2014-01-15"),
   progress    = T
   )
 

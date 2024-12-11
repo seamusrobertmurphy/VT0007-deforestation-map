@@ -243,10 +243,14 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 
 ## Assemble HRP data cube
 
-We assemble a raster data cube representing a ten year historical reference period (HRP) between 2014-01-01 and 2024-12-31 for the state of Barina Waini, Guyana. Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
+We assembled and processed a data cube for the ten year historical reference period (HRP) between start date 2014-01-01 and end date 2024-12-31 for the state of Barina Waini, Guyana. Masking is applied to cloud, shadow and water surfaces with median normalization using a cloudless pixel ranking.
 
 ```{r}
 #| eval: false
+#| warning: false
+#| error: false
+#| message: false
+
 cube_2014 = sits_cube(
   source     = "MPC",
   collection = "LANDSAT-C2-L2",
@@ -255,63 +259,88 @@ cube_2014 = sits_cube(
   version    = "mosaic"
 )
 
-cube_2014 <- sits_mosaic(
-  cube       = data,
-  roi        = aoi_target,
-  multicores = 16,
-  output_dir = tempdir()
-)
-
-plot(cube_2014,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2014-01-11"
-  )
-
 sits_view(cube_2014, band = "NDVI", date = "2014-01-11", opacity = 1)
 ```
 
 ```{r}
-#| eval: false
-#| layout-ncol: 3
-# plot cube timelines
-plot(cube_reg_2014,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2014-01-03"
-  )
+#| eval: true
+#| layout-ncol: 2
+tmap::tmap_options(max.raster = c(plot = 80000000, view = 100000000))
 
-plot(cube_reg_2019,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2019-01-08"
-  )
+rgb_2014_stars = stars::read_stars("./cubes/mosaic/LANDSAT_TM-ETM-OLI_231055_RGB_2014-01-11.tif")
+#rgb_2024_stars = stars::read_stars("./cubes/mosaic/LANDSAT_TM-ETM-OLI_231055_RGB_2024-01-07.tif")
 
-plot(cube_reg_2024,
-  red         = "RED",
-  green       = "GREEN",
-  blue        = "BLUE",
-  date        = "2024-01-07"
-  )
+tmap::tm_shape(rgb_2014_stars) +
+  tm_raster("LANDSAT_TM-ETM-OLI_231055_RGB_2014-01-11.tif", title = "RGB 2014") 
+
 ```
 
 ## LULC classification
 
-We import the GLanCE training dataset of annual times series points that includes 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix. The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
+We import the GLanCE training dataset of annual times series points that include 7 land cover classes (Figure 2; [@woodcockGlobalLandCover]). Training samples are fitted to a Random Forest model and post-processed with a Bayesian smoothing and then evaluated using confusion matrix.
+
+The classifier is then calibrated by mapping pixel uncertainty, adding new samples in areas of high uncertainty, reclassifying with improved samples and re-evaluated using confusion matrix.
 
 ![Figure 2: Land cover classes included in the GLanCE Level 1 classification scheme (Woodcock et al 2022)](training/glance_training_classes.png)
 
 ```{r}
 #| eval: false
 
-# Extract training set from gee to drive & import: https://gee-community-catalog.org/projects/glance_training/?h=training 
-glance_training_url = "https://drive.google.com/file/d/1CgBP2J2OdOhmOiVS4hGibLEMyVLTe1_P/view?usp=drive_link"
+# extract dataset from ee: https://gee-community-catalog.org/projects/glance_training/?h=training 
+#glance_training_url = "https://drive.google.com/file/d/1FhWTpSGFRTodDCY2gSGhssLuP2Plq4ZE/view?usp=drive_link"
 # file_name = "glance_training.csv"
 # download.file(url = url, path = here::here("training"), destfile = file_name)
 glance_training = read.csv(here::here("training", "glance_training.csv"))
+glimpse(glance_training)
+
+glance_training_edit = dplyr::select(
+    glance_training, Lon, Lat, Glance_Class_ID_level1, Start_Year, End_Year) |>
+    dplyr::rename(longitude = Lon) |>
+    dplyr::rename(latitude = Lat) |>
+    dplyr::rename(label = Glance_Class_ID_level1) |>
+    mutate(start_date = ymd(paste(Start_Year, "01", "01", sep = "-"))) |>
+    mutate(end_date = ymd(paste(End_Year, "01", "01", sep = "-"))) |>
+    dplyr::select(-Start_Year, -End_Year) 
+glimpse(glance_training_edit)
+
+# convert to sf for spatial filtering
+glance_training_sf = sf::st_as_sf(
+    glance_training_edit, coords = c("longitude", "latitude"))
+
+tmap::tm_shape(glance_training_sf) +
+  tm_dots(col = "red", size = 0.1, alpha = 0.7)  # Points in red
+
+# Plot the map
+tmap_mode("view")  # Interactive map
+tm_map 
+
+tmap::tmap_mode("view")
+tmap::tm_shape(glance_training_sf) + tmap::tm_borders(col = "white", lwd = 0.5) +
+  tmap::tm_text("State", col = "white", size = 1, alpha = 0.3, just = "bottom") +
+  tmap::tm_shape(aoi_country) + tmap::tm_borders(col = "white", lwd = 1) +
+  tmap::tm_shape(aoi_target) + tmap::tm_borders(col = "red", lwd = 2) +
+  tmap::tm_text("State", col = "red", size = 2) +
+  tmap::tm_basemap("Esri.WorldImagery")
+
+
+glance_training_sf = sf::st_intersection(glance_training_sf, aoi_target)
+
+plot(st_geometry(glance_training_sf))
+
+#dplyr::filter(start_date=="2014-01-01" | end_date=="2014-01-01" | start_date=="2024-01-01" | end_date=="2024-01-01")
+
+
+glimpse(glance_training_edit)
+
+labels <- c(
+  "1" = "Water",
+  "2" = "Ice",
+  "3" = "Urban",
+  "4" = "Barren",
+  "5" = "Trees",
+  "6" = "Shrublands",
+  "7" = "Herbaceous"
+)
 
 data("samples_prodes_4classes")
 # Select the same three bands used in the data cube

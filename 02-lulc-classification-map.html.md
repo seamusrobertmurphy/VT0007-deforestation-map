@@ -39,13 +39,15 @@ The following details a possible workflow approach to Verra's recommended sequen
 
 Training data was sourced from a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023]. Satellite imagery was sourced from the [Landsat Collection-2 Tier-1 Level-2](https://www.usgs.gov/landsat-missions/landsat-science-products) raster dataset. Data acquisition and pre-processing of satellite imagery was implemented in a google colab runtime [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map/blob/main/VT0007_data_preprocessing.ipynb).
 
-![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](assets/VT0007-risk-map-development-sequence.png){width="1044"}
+![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](assets/VT0007-risk-map-development-sequence.png){fig-align="center" width="750"}
 
 ## Environment setup
 
-To begin editing and running these scripts locally, first clone the project's github repository to local machine. This can be done using the git CLI commands from any terminal or by starting a new project with 'version control' options in your IDE from the File menu and entering the repository's github url found [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map), as shown below.
+**Clone github repository**
 
-![Figure 2: Cloning this github repository from its directory URL](assets/clone-repo.png){fig-align="center" width="600"}
+To copy and run these scripts locally, you may clone the project's github repository to your local machine using git terminal commands ([git installation here](https://git-scm.com/downloads)) or by starting a new project with 'version control' settings from the File menu in your IDE. To assign 'version control' to the correct repository address, you may locate the github URL [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map) (Figure 2). This will download all files and subfolders to your chosen directory, which you can open, run and edit without github syncing or contribute updates to certain branches as you please.
+
+![Figure 2: Cloning this github repository from its directory URL](assets/clone-repo.png){fig-align="center" width="750"}
 
 **Restore virtual environment**
 
@@ -151,7 +153,7 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 ```
 
 ::: {.cell-output-display}
-preserved152bf80df8c599b
+preserveda883e99ed81de14
 :::
 :::
 
@@ -189,7 +191,7 @@ tmap::tm_shape(rgb_2014_stars) +
 ```
 
 ::: {.cell-output-display}
-preserve4ce6d46c86be975d
+preserve3dc893d32c4e0339
 :::
 :::
 

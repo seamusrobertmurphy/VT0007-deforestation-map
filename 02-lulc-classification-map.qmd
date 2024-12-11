@@ -147,7 +147,7 @@ Training data was sourced from a filtered subset of the global training sample d
 
 **Clone github repository**
 
-To copy and run these scripts locally, you may clone the project's github repository to your local machine using git terminal commands ([git installation here](https://git-scm.com/downloads)) or by starting a new project with 'version control' settings from the File menu in your IDE. To assign 'version control' to the correct repository address, you may locate the github URL [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map) (Figure 2). This will download all files and subfolders to your chosen directory, which you can open, run and edit without github syncing or contribute updates to certain branches as you please.
+To copy and run these scripts locally, you may clone the project's github repository to your machine using git commands from any terminal ([git installation here](https://git-scm.com/downloads)) or by opening a 'new project' with 'version control' settings from the File menu options in your preferred IDE. To assign correct 'version control', you may locate the github repository's URL [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map) (Figure 2). Cloning will download all content files and subfolders to your chosen directory, which you can then open, run and edit locally without any github syncing or contribute to with commits to certain branches as you please.
 
 ![Figure 2: Cloning this github repository from its directory URL](assets/clone-repo.png){fig-align="center" width="750"}
 

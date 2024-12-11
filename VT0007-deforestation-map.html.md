@@ -147,7 +147,7 @@ tmap::tm_shape(aoi_states) + tmap::tm_borders(col = "white", lwd = 0.5) +
 ```
 
 ::: {.cell-output-display}
-preserve2c820a74b81a885d
+preserve7c8cbadb258d1cb4
 :::
 :::
 
@@ -185,7 +185,7 @@ tmap::tm_shape(rgb_2014_stars) +
 ```
 
 ::: {.cell-output-display}
-preservefc11d5f8734442f3
+preserve95a63da1386674d0
 :::
 :::
 

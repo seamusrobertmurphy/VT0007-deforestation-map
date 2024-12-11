@@ -46,5 +46,14 @@
   },
   "VT0007_data_preprocessing.ipynb": {
     "VT0007_data_preprocessing.html": "da7c1b00"
+  },
+  "02-lulc-classification-map.qmd": {
+    "02-lulc-classification-map.html": "d8ae9e43"
+  },
+  "03-deforestation-risk-map.qmd": {
+    "03-deforestation-risk-map.html": "6c9ec077"
+  },
+  "01-data-preprocessing.ipynb": {
+    "01-data-preprocessing.html": "eef067d7"
   }
 }

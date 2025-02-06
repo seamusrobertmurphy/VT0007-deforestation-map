@@ -546,7 +546,7 @@ plot(s2_cube_uncert_v2)
 
 ## Accuracy assessment
 
-To select a validation subset of the map, `sits` recommends Cochran’s method for stratified random sampling [@cochran1977sampling]. The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum. Alternatively, ad-hoc parameterization is suggested as follows.
+To select a validation subset of the map, `sits` recommends Cochran's method for stratified random sampling [@cochran1977sampling]. The method divides the population into homogeneous subgroups, or strata, and then applying random sampling within each stratum. Alternatively, ad-hoc parameterization is suggested as follows.
 
 ```{r}
 #| eval: false

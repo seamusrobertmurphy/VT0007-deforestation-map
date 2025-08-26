@@ -14,16 +14,16 @@ $code-block-border-left: #bcb8b6;
 
 $font-family-sans-serif: "Source Sans Pro", -apple-system, "system-ui", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
-$font-size-root: 17px;
-$toc-font-size: 12px;
+$font-size-root: 14px;
+$toc-font-size: 10px;
 
 //$code-block-bg: #160941;
 //$code-block-border-left: #2d1283;
 
 /*-- scss:rules --*/
 h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
-  margin-top: 40px;
+  font-weight: extra-bold;
+  margin-top: 32px;
 }
 
 //  text-shadow: -0.8px -0.8px 0 rgba(0, 0, 0, .3);

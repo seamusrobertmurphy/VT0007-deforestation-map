@@ -1,12 +1,12 @@
 ---
 title: "JNR Deforestation Risk Maps"
-date: 2024-11-04
+date: 2024-11-06
 author: 
   - name: Seamus Murphy
     orcid: 0000-0002-1792-0351 
     email: seamusrobertmurphy@gmail.com
 abstract: > 
-  A workflow for deriving deforestation risk maps in accordance with Verra's new methodology for unplanned deforestation allocation in jurisdictional nested REDD+ projects using [VT0007 toolset](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf).
+  A workflow for deriving deforestation risk maps in accordance with Verra's new methodology for unplanned deforestation allocation in jurisdictional nested REDD+ projects using [VT0007](https://verra.org/wp-content/uploads/2024/02/VT0007-Unplanned-Deforestation-Allocation-v1.0.pdf) toolset.
 keywords:
   - REDD+
   - VCS
@@ -135,6 +135,27 @@ base::options(
 sf::sf_use_s2(use_s2 = FALSE)
 ```
 
+```{css, echo=FALSE, class.source = 'foldable'}
+div.column {
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+}
+
+#TOC::before {
+  content: "";
+  display: block;
+  height: 50px;
+  width: 200px;
+  background-image: url(https://verra.org/wp-content/uploads/2024/11/VCS-overview-300x254-1.webp);
+  background-size: contain;
+  background-position: center;
+  background-position: 50% 50%;
+  padding-top: 5px !important;
+  background-repeat: no-repeat;
+}
+```
+
 # Summary
 
 The following details a possible workflow approach to Verra's recommended sequence of deforestation risk map development @verraVT0007UnplannedDeforestation2021.
@@ -142,6 +163,8 @@ The following details a possible workflow approach to Verra's recommended sequen
 Training data was sourced from a filtered subset of the global training sample data developed by[@stanimirovaGlobalLandCover2023]. Satellite imagery was sourced from the [Landsat Collection-2 Tier-1 Level-2](https://www.usgs.gov/landsat-missions/landsat-science-products) raster dataset. Data acquisition and pre-processing of satellite imagery was implemented in a google colab runtime [here](https://github.com/seamusrobertmurphy/VT0007-deforestation-map/blob/main/VT0007_data_preprocessing.ipynb).
 
 ![Figure 1: Verra's recommended risk map development sequence (VT0007:6)](assets/VT0007-risk-map-development-sequence.png){fig-align="center" width="750"}
+
+# 1. Workflow in R -\> `sits`
 
 ## Environment setup
 
@@ -159,6 +182,7 @@ To avoid issues with IDE settings and dotfiles, run the following code chunk of 
 
 ```{python}
 #| eval: false
+
 # create virtual environment 
 python3 -m venv working_director_name
 
@@ -244,6 +268,7 @@ rgee::ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T)
 
 ```{r}
 #| echo: true
+#| eval: false
 #| include: false 
 rgee::ee_Initialize(user = "seamusrobertmurphy", gcs = T, drive = T, confirm = F)
 ```
@@ -304,9 +329,6 @@ rgb_2014 = raster::stretch(rgb_2014, minv = 0, maxv = 255, minq = 0.1, maxq = 0.
 
 tmap::tm_shape(rgb_2014) +
   tmap::tm_rgb() 
-
-
-
 
 B1 = raster::raster("LC08_L2SP_166072_20210819_20210827_02_T1_SR_B1.TIF")
 B2 = raster::raster("LC08_L2SP_166072_20210819_20210827_02_T1_SR_B2.TIF")
